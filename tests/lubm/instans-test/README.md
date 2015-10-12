@@ -23,8 +23,7 @@ one level up.
 ## Installation and execution
 
 1. Install [INSTANS](https://github.com/aaltodsg/instans)
-2. Set the following environment variable:
-  * `$INSTANS_HOME` pointing to the root directory of INSTANS
+2. Set `$INSTANS_HOME` environment variable to point to the root directory of INSTANS
 3. The following batch files can be executed without parameters:
   * `./batch-comp-regimes.sh` Compare INSTANS output to reference
     answers on applicable entailment regimes.
