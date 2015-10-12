@@ -1,0 +1,43 @@
+INSTANS LUBM Results
+5.10.2015
+OS X Yosemite 10.10.5
+Processor 2.7 GHz Intel Core i5
+16 GB 1867 MHz DDR3 memory
+
+query,data,rules,time [s]
+
+./batch-speed-regimes.sh 
+q4,gen_5uni/University5,-r rules/rhodf-rules.rq,1,123.056766
+q4,gen_5uni/University5,-r rules/rhodf-rules.rq,2,108.882156
+q4,gen_5uni/University5,-r rules/rhodf-rules.rq,3,112.049642
+q4,gen_5uni/University5,-r rules/rhodf-rules.rq,4,123.810861
+q4,gen_5uni/University5,-r rules/dstar-rules.rq,1,145.356276
+q4,gen_5uni/University5,-r rules/dstar-rules.rq,2,138.743144
+q4,gen_5uni/University5,-r rules/dstar-rules.rq,3,136.454443
+q4,gen_5uni/University5,-r rules/dstar-rules.rq,4,144.619623
+q4,gen_5uni/University5,-r rules/rdfs-rules.rq,1,81.783848
+q4,gen_5uni/University5,-r rules/rdfs-rules.rq,2,73.992176
+q4,gen_5uni/University5,-r rules/rdfs-rules.rq,3,73.019571
+q4,gen_5uni/University5,-r rules/rdfs-rules.rq,4,75.244689
+q5,gen_5uni/University5,-r rules/rhodf-rules.rq,1,109.095792
+q5,gen_5uni/University5,-r rules/rhodf-rules.rq,2,108.757288
+q5,gen_5uni/University5,-r rules/rhodf-rules.rq,3,108.482901
+q5,gen_5uni/University5,-r rules/rhodf-rules.rq,4,109.530322
+q5,gen_5uni/University5,-r rules/dstar-rules.rq,1,129.751754
+q5,gen_5uni/University5,-r rules/dstar-rules.rq,2,131.735742
+q5,gen_5uni/University5,-r rules/dstar-rules.rq,3,130.530640
+q5,gen_5uni/University5,-r rules/dstar-rules.rq,4,137.776607
+q5,gen_5uni/University5,-r rules/rdfs-rules.rq,1,76.284000
+q5,gen_5uni/University5,-r rules/rdfs-rules.rq,2,76.063378
+q5,gen_5uni/University5,-r rules/rdfs-rules.rq,3,75.632363
+q5,gen_5uni/University5,-r rules/rdfs-rules.rq,4,76.159369
+q6 crashed heap with OWL2RL
+
+q11,gen_5uni/University5,-r rules/rdfp-rules.rq,1,199.609182
+q11,gen_5uni/University5,-r rules/rdfp-rules.rq,2,195.728641
+q11,gen_5uni/University5,-r rules/rdfp-rules.rq,3,199.539815
+q11,gen_5uni/University5,-r rules/rdfp-rules.rq,4,195.043246
+q13,gen_5uni/University5,-r rules/dstar-rules.rq -r rules/rdfp-rules.rq,1,809.455813
+q13,gen_5uni/University5,-r rules/dstar-rules.rq -r rules/rdfp-rules.rq,2,868.700392
+q13,gen_5uni/University5,-r rules/dstar-rules.rq -r rules/rdfp-rules.rq,3,843.679185
+q13,gen_5uni/University5,-r rules/dstar-rules.rq -r rules/rdfp-rules.rq,4,822.282219
