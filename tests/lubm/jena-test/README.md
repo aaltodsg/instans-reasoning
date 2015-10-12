@@ -23,8 +23,8 @@ one level up.
 
 1. Clone [reasoner-jena](https://github.com/aaltodsg/reasoner-jena)
    from github. Set `$REASONERJENA_HOME` to point to the root of the
-   repository. If `sbt` is installed, it should take care of
-   everything else.
+   repository. `sbt` (must be installed) should take care of
+   everything else. We used SBT version 0.13.8.
 2. The following batch files can be executed without parameters:
   * `./batch-comp-reasoners.sh` Compares Jena results to reference
     answers with different reasoners from simpler (and faster) to more

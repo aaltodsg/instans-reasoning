@@ -13,6 +13,7 @@ Please refer to
 * [LUBM with INSTANS](https://github.com/aaltodsg/instans-reasoning/tree/master/tests/lubm/instans-test)
 * [LUBM with Jena](https://github.com/aaltodsg/instans-reasoning/tree/master/tests/lubm/jena-test)
 * [LUBM with Stardog](https://github.com/aaltodsg/instans-reasoning/tree/master/tests/lubm/stardog-test)
+
 for further instructions.
 
 Some results are documented under [docs](https://github.com/aaltodsg/instans-reasoning/tree/master/docs).

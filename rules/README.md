@@ -32,5 +32,5 @@ The following collections of valid and axiomatic triples are also included:
 
 ## Usage
 
-Please refer to the tests directory.
+Please refer to [tests](https://github.com/aaltodsg/instans-reasoning) directory.
 
