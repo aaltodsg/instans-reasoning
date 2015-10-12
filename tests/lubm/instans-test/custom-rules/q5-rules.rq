@@ -1,0 +1,31 @@
+# LUBM Query 5
+# Minimal set of Rules
+
+# Sources:
+# RDF 1.1 Semantics: http://www.w3.org/TR/rdf11-mt/#patterns-of-rdfs-entailment-informative
+# Munoz 2007: http://link.springer.com/chapter/10.1007/978-3-540-72667-8_6
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+## rdfs7 (RDF 1.1 Semantics)
+INSERT { ?s ?q ?o }
+WHERE { ?s ?p ?o .
+        ?p rdfs:subPropertyOf ?q
+	FILTER (!sameTerm(?p,?q)) } ;
+
+## rdfs9 (RDF 1.1 Semantics)
+INSERT { ?a a ?y }
+WHERE { ?x rdfs:subClassOf ?y .
+        ?a a ?x } ;
+
+## 5.(a) Implicit typing (Munoz 2007):
+INSERT { ?x a ?b }
+WHERE { ?a rdfs:domain ?b .
+        ?c rdfs:subPropertyOf ?a .
+        ?x ?c ?y } ;
+
+## 6.(d)-1 Subproperty reflexivity (Munoz 2007):
+INSERT { ?a rdfs:subPropertyOf ?a }
+WHERE { ?a rdfs:domain ?x } ;
+

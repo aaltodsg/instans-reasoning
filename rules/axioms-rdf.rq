@@ -1,0 +1,48 @@
+# Source: RDF 1.1 Semantics W3C Recommendation 25 February 2014
+# Section: 8 RDF Interpretations
+# http://www.w3.org/TR/rdf11-mt/#rdf-interpretations
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+# Main axiomatic triples
+
+INSERT DATA {
+  rdf:type rdf:type rdf:Property .
+  rdf:subject rdf:type rdf:Property .
+  rdf:predicate rdf:type rdf:Property .
+  rdf:object rdf:type rdf:Property .
+  rdf:first rdf:type rdf:Property .
+  rdf:rest rdf:type rdf:Property .
+  rdf:value rdf:type rdf:Property .
+  rdf:nil rdf:type rdf:List .
+} ;
+
+# Containers
+
+# MJR: This is a bit tricky: It does not make sense to generate an infinite number of axiomatic triples, if they are never used.
+# The following solution generates those triples, if they are seen somewhere in the data. This is probably not the perfect solution,
+# because those triples will not exist before they have occurred?
+
+# Can rdf:_n appear as a subject or object? The following solution generates the related axiomatic triple, if rdf:_n appears in either
+# subject or predicate position.
+
+# rdf:_n as subject
+INSERT {
+ ?s rdf:type rdf:Property
+}
+WHERE {
+  ?s ?p ?o
+  FILTER (strStarts(str(?s),"http://www.w3.org/1999/02/22-rdf-syntax-ns#_"))
+  FILTER NOT EXISTS { ?s rdf:type rdf:Property }
+} ;
+
+# rdf:_n as predicate
+INSERT {
+ ?p rdf:type rdf:Property
+}
+WHERE {
+  ?s ?p ?o
+  FILTER (strStarts(str(?p),"http://www.w3.org/1999/02/22-rdf-syntax-ns#_"))
+  FILTER NOT EXISTS { ?p rdf:type rdf:Property }
+} ;
+

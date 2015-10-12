@@ -1,0 +1,107 @@
+# SWCLOS2 Rules
+
+# "Additional entailment rules" from SWCLOS2 manual: http://www-kasm.nii.ac.jp/~koide/SWCLOS2/Manual/13OWLEntailments.htm
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+## rule1 (default top in OWL)
+
+INSERT { ?v a owl:Thing .
+         ?w a owl:Thing }
+WHERE { ?v ?p ?w } ;
+
+## rule2a (default metaclass for intersection and union list)
+
+INSERT { ?v a owl:Class }
+WHERE { ?u owl:intersectionOf ?v } ;
+
+## rule2b (default metaclass for intersection and union list)
+
+INSERT { ?v a owl:Class }
+WHERE { ?u owl:unionOf ?v } ;
+
+## rule3 (default class for distincts)
+
+INSERT { ?v a owl:Thing }
+WHERE { ?u owl:distinctMembers ?v } ;
+
+## rule4 (permeation of disjointness)
+
+INSERT { ?u2 owl:disjointWith ?v2 }
+WHERE { ?u1 owl:disjointWith ?v1 .
+        ?u2 rdfs:subClassOf ?u1 .
+        ?v2 rdfs:subClassOf ?v1 } ;
+
+## rule5 (reflexive complementOf)
+
+INSERT { ?v owl:complementOf ?u }
+WHERE { ?u owl:complementOf ?v } ;
+
+## rule6 (disjoint complementOf)
+
+INSERT { ?u owl:disjointWith ?v }
+WHERE { ?u owl:complementOf ?v } ;
+
+## rule7 (oneOf entailment)
+
+INSERT { ?x a ?u }
+WHERE { ?u owl:oneOf ?x } ;
+
+## rule8 (domain/range equivalency by SymmetricProperty)
+
+INSERT { ?C owl:equivalentClass ?D }
+WHERE { ?p a owl:SymmetricProperty ;
+           rdfs:domain ?C ;
+           rdfs:range ?D } ;
+
+## rule9 (reflexive equivalentProperty)
+
+INSERT { ?q owl:equivalentProperty ?p }
+WHERE { ?p owl:equivalentProperty ?q } ;
+
+## rule10 (transitive equivalentProperty)
+
+INSERT { ?p owl:equivalentProperty ?r }
+WHERE { ?p owl:equivalentProperty ?q .
+        ?q owl:equivalentProperty ?r } ;
+
+## rule11a (domain by equivalentProperty)
+
+INSERT { ?q rdfs:domain ?u }
+WHERE { ?p owl:equivalentProperty ?q ;
+           rdfs:domain ?u } ;
+
+## rule11b (range by equivalentProperty)
+
+INSERT { ?q rdfs:range ?u }
+WHERE { ?p owl:equivalentProperty ?q ;
+           rdfs:range ?u } ;
+
+## rule12a (domain by inverseOf)
+
+INSERT { ?q rdfs:domain ?u }
+WHERE { ?p owl:inverseOf ?q ;
+           rdfs:domain ?u } ;
+
+## rule12b (range by inverseOf)
+
+INSERT { ?q rdfs:range ?u }
+WHERE { ?p owl:inverseOf ?q ;
+           rdfs:range ?u } ;
+
+## rule13 (reflexive differentFrom)
+
+INSERT { ?y owl:differentFrom ?x }
+WHERE { ?x owl:differentFrom ?y } ;
+
+## rule14 (intersection entailment)
+
+INSERT { ?x a ?u }
+WHERE { ?u owl:intersectionOf ?v ;
+           owl:intersectionOf ?w .
+	FILTER (!sameTerm(?v,?w))
+        ?x a ?v ;
+           a ?w } ;
+

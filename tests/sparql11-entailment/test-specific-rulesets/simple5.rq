@@ -1,0 +1,25 @@
+# Special rule to resolve test: simple5
+
+# OWL-rules taylored to correspond to the SPARQL entailment tests in:
+# http://www.w3.org/2009/sparql/implementations/
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+## extra9: simple5.rq
+
+INSERT {
+  ?a a [ a owl:Restriction ;
+           owl:onProperty ?p ;
+	   owl:someValuesFrom [
+	     a owl:Class ;
+             owl:unionOf ( ?c1 ?c0 ) ] ] }
+WHERE { ?c0 a owl:Class .
+        ?c1 a owl:Class .
+        ?p a owl:ObjectProperty .
+	?a ?p [ a ?c0 ] .
+	?b ?p [ a ?c1 ] .
+	FILTER (!sameTerm(?c0,?c1))
+	FILTER (!isBlank(?c0))
+	FILTER (!isBlank(?c1)) } ; 

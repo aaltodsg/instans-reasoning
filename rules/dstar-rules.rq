@@ -1,0 +1,88 @@
+# D* Entailment Rules
+
+# From:
+# D* entailment: http://www.springerlink.com/content/366474250nl35412/
+# RDF 1.1 Semantics: http://www.w3.org/TR/rdf11-mt/#patterns-of-rdf-entailment-informative
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+## lg+rdf2-D+rdfs1 (also rdfD1 in RDF 1.1 Semantics)
+
+# NOTE: rdfs1 is different from rdsf1 in RDF 1.1 Semantics!!
+
+# @name lg+rdf2-D+rdfs1
+INSERT { ?v ?p [ a ?a , rdfs:Literal ] }
+WHERE {
+  ?v ?p ?l .
+  # Only Literal objects are candidates
+  BIND (IF(isLiteral(?l),datatype(?l),?unbound) as ?a)
+  # Pass if a datatype is found
+  FILTER (bound(?a))
+} ;
+
+## gl
+
+# Not implemented: The blank node bl and the associated type a are not enough to reconstruct the literal value!
+
+# @name rdfs2 (RDF 1.1 Semantics, D*)
+INSERT { ?s a ?c }
+WHERE { ?s ?p ?o .
+        ?p rdfs:domain ?c } ;
+
+# @name rdfs3 (RDF 1.1 Semantics, D*)
+INSERT { ?o a ?c }
+WHERE { ?s ?p ?o .
+        ?p rdfs:range ?c .
+	FILTER ( isIRI(?o) || isBlank(?o) ) } ;
+
+# @name rdfs4a (RDF 1.1 Semantics, D*)
+INSERT { ?s a rdfs:Resource }
+WHERE { ?s ?p ?o } ;
+
+# @name rdfs4b (RDF 1.1 Semantics, D*)
+INSERT { ?o a rdfs:Resource }
+WHERE { ?s ?p ?o .
+        FILTER ( isIRI(?o) || isBlank(?o) ) } ;
+
+# @name rdfs5 (RDF 1.1 Semantics)
+INSERT { ?a rdfs:subPropertyOf ?c }
+WHERE { ?a rdfs:subPropertyOf ?b .
+        ?b rdfs:subPropertyOf ?c } ;
+
+# @name rdfs6 (RDF 1.1 Semantics, D*)
+INSERT { ?s rdfs:subPropertyOf ?s }
+WHERE { ?s a rdf:Property } ;
+
+# @name rdfs7x (RDF 1.1 Semantics, D*)
+INSERT { ?s ?q ?o }
+WHERE { ?s ?p ?o .
+        ?p rdfs:subPropertyOf ?q
+        FILTER ( isIRI(?q) || isBlank(?q) )
+	FILTER (!sameTerm(?p,?q)) } ;
+
+# @name rdfs8 (RDF 1.1 Semantics, D*)
+INSERT { ?s rdfs:subClassOf rdfs:Resource }
+WHERE { ?s a rdfs:Class } ;
+
+# @name rdfs9 (RDF 1.1 Semantics, D*)
+INSERT { ?a a ?y }
+WHERE { ?x rdfs:subClassOf ?y .
+        ?a a ?x } ;
+
+# @name rdfs10 (RDF 1.1 Semantics, D*)
+INSERT { ?s rdfs:subClassOf ?s }
+WHERE { ?s rdf:type rdfs:Class } ;
+
+# @name rdfs11 (RDF 1.1 Semantics, D*)
+INSERT { ?a rdfs:subClassOf ?c }
+WHERE { ?a rdfs:subClassOf ?b .
+        ?b rdfs:subClassOf ?c } ;
+
+# @name rdfs12 (RDF 1.1 Semantics, D*)
+INSERT { ?x rdfs:subPropertyOf rdfs:member }
+WHERE { ?x a rdfs:ContainerMembershipProperty } ;
+
+# @name rdfs13 (RDF 1.1 Semantics, D*)
+INSERT { ?x rdfs:subClassOf rdfs:Literal }
+WHERE { ?x a rdfs:Datatype } ;

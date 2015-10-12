@@ -1,0 +1,34 @@
+### Minimum rule-set to solve parent3.rq
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+## rdfs9 (RDF 1.1 Semantics)
+INSERT { ?a a ?y }
+WHERE { ?x rdfs:subClassOf ?y .
+        ?a a ?x } ;
+
+## rdfp12a, rdfp12b (subsumption on equivalentClass, from ter Horst)
+
+INSERT { ?v rdfs:subClassOf ?w .
+         ?w rdfs:subClassOf ?v }
+WHERE { ?v owl:equivalentClass ?w } ;
+
+## rdfp15 (full existential restriction entailment, from ter Horst)
+
+INSERT { ?u a ?v }
+WHERE { ?v owl:someValuesFrom ?w ;
+           owl:onProperty ?p .
+        ?u ?p ?x .
+        ?x a ?w } ;
+
+## rule1 (default top in OWL, from ter Horst)
+
+INSERT { ?v a owl:Thing .
+         ?w a owl:Thing }
+WHERE { ?v ?p ?w } ;
+
+
+
+

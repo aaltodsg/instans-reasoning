@@ -1,0 +1,26 @@
+# OWL 2 RL Rules
+
+# From "OWL 2 Web Ontology Language Profiles (Second Edition), W3C Recommendation 11 December 2012"
+# http://www.w3.org/TR/owl2-profiles/
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+PREFIX : <http://instans.org/>
+
+### Table 7: The Semantics of Class Axioms
+
+# @name cax-sco (also rdfs9, RDF 1.1 Semantics)
+INSERT { ?a a ?y }
+WHERE { ?x rdfs:subClassOf ?y .
+        ?a a ?x } ;
+
+### Table 9: The Semantics of Schema Vocabulary
+
+# @name scm-cls
+INSERT { ?c rdfs:subClassOf ?c ;
+            owl:equivalentClass ?c ;
+            rdfs:subClassOf owl:Thing .
+         owl:Nothing rdfs:subClassOf ?c }
+WHERE { ?c a owl:Class } ;

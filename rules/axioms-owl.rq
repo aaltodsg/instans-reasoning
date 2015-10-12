@@ -1,0 +1,20 @@
+# OWL Axioms
+
+# Includes additional axioms on top of the ones in "owl.ttl"
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+INSERT DATA {
+
+# Axiom 1
+# From: Table 13.2 / http://www-kasm.nii.ac.jp/~koide/SWCLOS2/Manual/13OWLEntailments.htm
+
+  owl:Thing rdfs:subClassOf rdfs:Resource .
+
+# Axiom 2
+# From: Table 13.2 / http://www-kasm.nii.ac.jp/~koide/SWCLOS2/Manual/13OWLEntailments.htm
+
+  rdfs:Class rdfs:subClassOf owl:Thing .
+
+}

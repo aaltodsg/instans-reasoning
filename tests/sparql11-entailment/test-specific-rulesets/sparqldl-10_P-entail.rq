@@ -1,0 +1,10 @@
+### Minimum rule-set to solve sparqldl-10.rq
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+## rdfp5a (self-evident sameAs, ter Horst)
+
+INSERT { ?v owl:sameAs ?v }
+WHERE { ?v ?p ?w } ;

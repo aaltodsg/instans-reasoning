@@ -1,0 +1,23 @@
+# Special rule to resolve test: parent5
+
+# OWL-rules taylored to correspond to the SPARQL entailment tests in:
+# http://www.w3.org/2009/sparql/implementations/
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+## extra15: parent5.rq
+
+INSERT { ?x a [
+           a owl:Restriction ;
+           owl:onProperty ?p ;
+           owl:someValuesFrom ?z  ] }
+WHERE { ?x a [
+           a owl:Restriction ;
+           owl:onProperty ?p ;
+	   owl:allValuesFrom [ a owl:Class ; owl:oneOf ( ?y ) ] ] .
+	?y a ?z .
+	FILTER (!isBlank(?x))
+	FILTER (!isBlank(?y))
+	FILTER (!isBlank(?z)) } ;

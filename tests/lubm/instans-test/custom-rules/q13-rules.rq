@@ -1,0 +1,28 @@
+# LUBM Query 13 rules
+
+# From "OWL 2 Web Ontology Language Profiles (Second Edition), W3C Recommendation 11 December 2012"
+# http://www.w3.org/TR/owl2-profiles/
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+PREFIX : <http://instans.org/>
+
+### Table 5. The Semantics of Axioms about Properties
+
+# @name prp-dom (also: rdfs2, RDF 1.1 Semantics)
+INSERT { ?x a ?c }
+WHERE { ?p rdfs:domain ?c .
+        ?x ?p ?y } ;
+
+# @name prp-spo1 (also: rdfs7, RDF 1.1 Semantics)
+INSERT { ?x ?p2 ?y }
+WHERE { ?p1 rdfs:subPropertyOf ?p2 .
+        ?x ?p1 ?y .
+	FILTER (!sameTerm(?p1,?p2)) } ;
+
+# @name prp-inv1 (also rdfp8 (ter Horst), inv2 (SparkWave))
+INSERT { ?y ?p2 ?x }
+WHERE { ?p1 owl:inverseOf ?p2 .
+        ?x ?p1 ?y } ;

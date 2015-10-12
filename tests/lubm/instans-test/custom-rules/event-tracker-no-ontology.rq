@@ -1,0 +1,25 @@
+# Event tracker - no static data
+
+# Tracks the changing of events/windows in the main input and updates
+# input redirection accordingly.
+
+# Specialized for the LUBM benchmark, each department represents an "event"
+# This version is for queries without reasoning support, i.e. there is no static data to be kept in memory.
+
+BASE <http://instans.org/>
+
+PREFIX : <http:instans.org/default#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX ub: <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#>
+
+# @name Clean-previous-event
+DELETE { ?s ?p ?o }
+WHERE {
+  ?x a owl:Ontology
+  GRAPH <control> { :activegraph :address <event> }
+  ?s ?p ?o
+} ;
+
+# SELECT *
+# WHERE { GRAPH <static> { ?s ?p ?o } } ;

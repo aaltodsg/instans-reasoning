@@ -1,0 +1,17 @@
+# LUBM Query 4
+# Minimal set of Rules
+
+# Sources:
+# RDF 1.1 Semantics: http://www.w3.org/TR/rdf11-mt/#patterns-of-rdfs-entailment-informative
+# http://www.w3.org/TR/owl2-profiles/
+
+BASE <http://instans.org/>
+PREFIX : <http://instans.org/>
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+# @name cax-sco (also rdfs9, RDF 1.1 Semantics)
+INSERT { ?a a ?y }
+WHERE { GRAPH <static> { ?x rdfs:subClassOf ?y }
+        ?a a ?x } ;

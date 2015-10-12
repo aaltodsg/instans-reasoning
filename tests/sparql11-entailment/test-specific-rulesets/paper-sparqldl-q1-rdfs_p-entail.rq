@@ -1,0 +1,16 @@
+### Minimum rule-set to solve paper-sparqldl-Q1-rdfs.rq
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+## rdfp5a (self-evident sameAs, ter Horst)
+
+INSERT { ?v owl:sameAs ?v }
+WHERE { ?v ?p ?w } ;
+
+## rdfp9 (subsumption on same classes, from ter Horst)
+
+INSERT { ?v rdfs:subClassOf ?w }
+WHERE { ?v a owl:Class .
+        ?v owl:sameAs ?w } ;

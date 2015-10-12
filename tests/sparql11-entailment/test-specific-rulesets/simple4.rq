@@ -1,0 +1,40 @@
+# Special rules to resolve test: simple4
+
+# OWL-rules taylored to correspond to the SPARQL entailment tests in:
+# http://www.w3.org/2009/sparql/implementations/
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+## extra7: simple4.rq
+
+INSERT {
+  ?x a [ a owl:Class ;
+         owl:unionOf ( ?c0 ?c1 ) ] }
+WHERE { ?c0 a owl:Class .
+        ?c1 a owl:Class .
+	?x a ?c0 .
+	?y a ?c1 .
+	FILTER (!sameTerm(?c0,?c1))
+	FILTER (!isBlank(?c0))
+	FILTER (!isBlank(?c1))
+	FILTER NOT EXISTS {
+          ?x a [ a owl:Class ;
+                 owl:unionOf ( ?c0 ?c1 ) ] } } ; 
+
+## extra8: simple4.rq
+
+INSERT {
+  ?x a [ a owl:Class ;
+         owl:unionOf ( ?c0 ?c1 ) ] }
+WHERE { ?c0 a owl:Class .
+        ?c1 a owl:Class .
+	?x a ?c1 .
+	?y a ?c0 .
+	FILTER (!sameTerm(?c0,?c1))
+	FILTER (!isBlank(?c0))
+	FILTER (!isBlank(?c1))
+        FILTER NOT EXISTS {
+	  ?x a [ a owl:Class ;
+         owl:unionOf ( ?c0 ?c1 ) ] } } ; 

@@ -1,0 +1,14 @@
+### Minimum rule-set to solve sparqldl-12.rq
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+## extra3: sparqldl-12.rq
+
+# MJR: What is the actual criteria of something being in the domain of owl:Thing?
+# This version passes the test, but should it rather apply to e.g. all subjects?
+
+INSERT { ?x rdfs:domain owl:Thing }
+WHERE { ?x rdfs:domain ?y } ;
+

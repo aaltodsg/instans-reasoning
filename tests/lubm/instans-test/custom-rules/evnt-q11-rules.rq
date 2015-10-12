@@ -1,0 +1,24 @@
+# LUBM Query 11 rules
+# Event processing version => Considers inputs from static and changing (event-specific) graphs
+
+# From "OWL 2 Web Ontology Language Profiles (Second Edition), W3C Recommendation 11 December 2012"
+# http://www.w3.org/TR/owl2-profiles/
+
+BASE <http://instans.org/>
+PREFIX : <http:instans.org/default#>
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+PREFIX : <http://instans.org/>
+
+### Table 5. The Semantics of Axioms about Properties
+
+# @name prp-trp (also: rdfp4, transitive property, ter Horst)
+INSERT { ?u ?p ?w }
+WHERE { GRAPH <static> { ?p a owl:TransitiveProperty }
+        ?u ?p ?v .
+	?v ?p ?w } ;
+
+

@@ -1,0 +1,93 @@
+# rho-df rules
+
+# Sources:
+# Munoz 2007: http://link.springer.com/chapter/10.1007/978-3-540-72667-8_6
+# Munoz 2009: http://www.sciencedirect.com/science/article/pii/S1570826809000249
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+## 2.(a) Subproperty (Munoz 2007, also rdfs5 from RDF 1.1 Semantics)
+INSERT { ?a rdfs:subPropertyOf ?c }
+WHERE { ?a rdfs:subPropertyOf ?b .
+        ?b rdfs:subPropertyOf ?c } ;
+
+## 2.(b) Subproperty (Munoz 2007, also rdfs7 from RDF 1.1 Semantics)
+INSERT { ?s ?q ?o }
+WHERE { ?s ?p ?o .
+        ?p rdfs:subPropertyOf ?q
+	FILTER (!sameTerm(?p,?q)) } ;
+
+## 3.(a) Subclass (Munoz 2007, also rdfs11 from RDF 1.1 Semantics)
+INSERT { ?a rdfs:subClassOf ?c }
+WHERE { ?a rdfs:subClassOf ?b .
+        ?b rdfs:subClassOf ?c } ;
+
+## 3.(b) Subclass (Munoz 2007, also rdfs9 from RDF 1.1 Semantics)
+INSERT { ?a a ?y }
+WHERE { ?x rdfs:subClassOf ?y .
+        ?a a ?x } ;
+
+## 4.(a) Typing (Munoz 2007, also rdfs2 from RDF 1.1 Semantics)
+INSERT { ?s a ?c }
+WHERE { ?s ?p ?o .
+        ?p rdfs:domain ?c } ;
+
+## 4.(b) Typing (Munoz 2007, also rdfs3 from RDF 1.1 Semantics)
+INSERT { ?o a ?c }
+WHERE { ?s ?p ?o .
+        ?p rdfs:range ?c } ;
+
+## 5.(a) Implicit typing (Munoz 2007):
+INSERT { ?x a ?b }
+WHERE { ?a rdfs:domain ?b .
+        ?c rdfs:subPropertyOf ?a .
+        ?x ?c ?y } ;
+
+## 5.(b) Implicit typing (Munoz 2007):
+INSERT { ?y a ?b }
+WHERE { ?a rdfs:range ?b .
+        ?c rdfs:subPropertyOf ?a .
+        ?x ?c ?y } ;
+
+## 6.(a) Subproperty reflexivity (Munoz 2007, combination of rdfD2 and rdfs6 in RDF+RDFS-entailment regimes)
+INSERT { ?a rdfs:subPropertyOf ?a }
+WHERE { ?x ?a ?y } ;
+
+## 6.(b) Subproperty reflexivity (Munoz 2007):
+INSERT { ?a rdfs:subPropertyOf ?a .
+         ?b rdfs:subPropertyOf ?b }
+WHERE { ?a rdfs:subPropertyOf ?b
+        FILTER ( !sameTerm(?a,?b) ) } ;
+
+## 6.(c) Subproperty reflexivity (Munoz 2007):
+INSERT DATA { rdfs:subPropertyOf rdfs:subPropertyOf rdfs:subPropertyOf .
+              rdfs:subClassOf rdfs:subPropertyOf rdfs:subClassOf .
+              rdf:type rdfs:subPropertyOf rdf:type .
+              rdfs:domain rdfs:subPropertyOf rdfs:domain .
+              rdfs:range rdfs:subPropertyOf rdfs:range } ;
+
+## 6.(d)-1 Subproperty reflexivity (Munoz 2007):
+INSERT { ?a rdfs:subPropertyOf ?a }
+WHERE { ?a rdfs:domain ?x } ;
+
+## 6.(d)-2 Subproperty reflexivity (Munoz 2007):
+INSERT { ?a rdfs:subPropertyOf ?a }
+WHERE { ?a rdfs:range ?x } ;
+
+## 7.(a) Subclass reflexivity (Munoz 2007):
+INSERT { ?a rdfs:subClassOf ?a .
+         ?b rdfs:subClassOf ?b }
+WHERE { ?a rdfs:subClassOf ?b } ;
+
+## 7.(b)-1 Subclass reflexivity (Munoz 2007):
+INSERT { ?a rdfs:subClassOf ?a }
+WHERE { ?x rdfs:domain ?a } ;
+
+## 7.(b)-2 Subclass reflexivity (Munoz 2007):
+INSERT { ?a rdfs:subClassOf ?a }
+WHERE { ?x rdfs:range ?a } ;
+
+## 7.(b)-3 Subclass reflexivity (Munoz 2007):
+INSERT { ?a rdfs:subClassOf ?a }
+WHERE { ?x a ?a } ;

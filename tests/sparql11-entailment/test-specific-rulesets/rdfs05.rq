@@ -1,0 +1,28 @@
+### Minimum rule-set to solve rdfs05.rq
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+## rdfs9 (RDF 1.1 Semantics)
+INSERT { ?a a ?y }
+WHERE { ?x rdfs:subClassOf ?y .
+        ?a a ?x } ;
+
+## 7.(a) Subclass reflexivity (Munoz 2007):
+INSERT { ?a rdfs:subClassOf ?a .
+         ?b rdfs:subClassOf ?b }
+WHERE { ?a rdfs:subClassOf ?b } ;
+
+### Alternative solution with OWL-entailments by ter Horst:
+
+## rdfp5b (self-evident sameAs, ter Horst)
+
+# INSERT { ?w owl:sameAs ?w }
+# WHERE { ?v ?p ?w } ;
+
+## rdfp9 (subsumption on same classes, from ter Horst)
+
+# INSERT { ?v rdfs:subClassOf ?w }
+# WHERE { ?v a owl:Class .
+#         ?v owl:sameAs ?w } ;

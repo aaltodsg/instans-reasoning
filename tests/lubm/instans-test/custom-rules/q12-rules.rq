@@ -1,0 +1,60 @@
+# LUBM Query 12 Rules
+
+# From "OWL 2 Web Ontology Language Profiles (Second Edition), W3C Recommendation 11 December 2012"
+# http://www.w3.org/TR/owl2-profiles/
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+PREFIX : <http://instans.org/>
+
+### Table 6. The Semantics of Classes
+
+## cls-int1
+
+# @name cls-int1-Initiate a new list
+INSERT { ?c :clsint1initkeyhead ?x }
+WHERE { ?c owl:intersectionOf ?x } ;
+
+# @name cls-int1-FirstStep list elements
+INSERT { ?c :clsint1keyhead ?nexthead }
+WHERE { ?c :clsint1initkeyhead ?thishead .
+        ?thishead rdf:first ?cn .
+	?y a ?cn .
+        ?thishead rdf:rest ?nexthead } ;
+
+# @name cls-int1-Traverse list elements
+DELETE { ?c :clsint1keyhead ?thishead }
+INSERT { ?c :clsint1keyhead ?nexthead }
+WHERE { ?c :clsint1keyhead ?thishead .
+        ?thishead rdf:first ?cn .
+	?y a ?cn .
+        ?thishead rdf:rest ?nexthead .
+        FILTER (?nexthead != rdf:nil) } ;
+
+# @name cls-int1-Terminate (Note the final list element, remove head, output result)
+DELETE { ?c :clsint1keyhead ?thishead }
+INSERT { ?y a ?c }
+WHERE { ?c :clsint1keyhead ?thishead .
+        ?thishead rdf:first ?cn .
+	?y a ?cn .
+        ?thishead rdf:rest ?nexthead .
+        FILTER (?nexthead = rdf:nil) } ;
+
+# @name cls-svf1 (also rdfp15, full existential restriction entailment, ter Horst)
+INSERT { ?u a ?v }
+WHERE { ?v owl:someValuesFrom ?w ;
+           owl:onProperty ?p .
+        ?u ?p ?x .
+        ?x a ?w } ;
+
+### Table 7: The Semantics of Class Axioms
+
+# @name cax-sco (also rdfs9, RDF 1.1 Semantics)
+INSERT { ?a a ?y }
+WHERE { ?x rdfs:subClassOf ?y .
+        ?a a ?x } ;
+
+
+

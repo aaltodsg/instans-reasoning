@@ -1,0 +1,13 @@
+### Minimum rule-set to solve rdf01.rq
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+## rdfD2 (RDF 1.1 Semantics)
+
+# Note: Generates a lot of data, and usefulness is limited. Consider to comment out.
+
+# Should this be conditional on literal objects in D?
+
+INSERT { ?p a rdf:Property } 
+WHERE { ?s ?p ?o } ;
+

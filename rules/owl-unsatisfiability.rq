@@ -1,0 +1,208 @@
+# OWL Unsatisfiability Rules
+
+# Sources:
+# OWL 2 RL profiles: http://www.w3.org/TR/owl2-profiles/#Reasoning_in_OWL_2_RL_and_RDF_Graphs_using_Rules
+# SWCLOS2 manual / table 13.5: http://www-kasm.nii.ac.jp/~koide/SWCLOS2/Manual/13OWLEntailments.htm
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+PREFIX : <http://instans.org/>
+
+# @name oneof-condition-unsatisfiable
+SELECT DISTINCT ?err ?u ?x ?y
+WHERE { ?u owl:oneOf ?x .
+        ?y a ?u ;
+           owl:differentFrom ?x
+	BIND ("oneof-condition-unsatisfiable" as ?err) } ;
+
+## eq-diff1 in OWL 2 RL
+## sameas-condition-unsatisfiable or differentfrom-condition-unsatisfiable
+
+# @name eq-diff1
+SELECT DISTINCT ?err ?x ?y
+WHERE { ?x owl:sameAs ?y .
+        ?x owl:differentFrom ?y .
+	BIND ("sameas-condition-unsatisfiable or differentfrom-condition-unsatisfiable" as ?err) } ;
+
+## eq-diff2 in OWL 2 RL
+
+# @name eq-diff2-Declare owl:members as a listProperty to list-handler.rq
+INSERT DATA { :eqdiff2 :listProperty owl:members } ;
+
+# @name eq-diff2
+SELECT DISTINCT ?err ?val1 ?val2
+WHERE { ?x a owl:AllDifferent ;
+           owl:members ?head ;
+           :element [ :value ?val1 ; :index ?index1 ] ;
+	   :element [ :value ?val2 ; :index ?index2 ] .
+	?val1 owl:sameAs ?val2
+	FILTER ( ?index1 < ?index2 )
+	BIND ("eq-diff2 false: members of AllDifferent are sameAs" as ?err) } ;
+
+## eq-diff3 in OWL 2 RL
+
+# @name eq-diff3-Declare
+INSERT DATA { :eqdiff3 :listProperty owl:distinctMembers } ;
+
+# @name eq-diff3
+SELECT DISTINCT ?err ?val1 ?val2
+WHERE { ?x a owl:AllDifferent ;
+           owl:distinctMembers ?head ;
+           :element [ :value ?val1 ; :index ?index1 ] ;
+	   :element [ :value ?val2 ; :index ?index2 ] .
+	?val1 owl:sameAs ?val2
+	FILTER ( ?index1 < ?index2 )
+	BIND ("eq-diff3 false: distinctMembers of AllDifferent are sameAs" as ?err) } ;
+
+## disjointwith-condition-unsatisfiable or equivalentclass-condition-unsatisfiable
+
+# @name disjointwith-condition-unsatisfiable
+SELECT DISTINCT ?err ?u ?v
+WHERE { ?u owl:disjointWith ?v ;
+           owl:equivalentOf ?v .
+	BIND ("disjointwith-condition-unsatisfiable or equivalentclass-condition-unsatisfiable" as ?err) } ;
+
+# @name disjoint-instances-condition-unsatisfiable (also OWL 2 RL cax-dw)
+SELECT DISTINCT ?err ?u ?v ?x
+WHERE { ?u owl:disjointWith ?v .
+        ?x a ?u,?v .
+	BIND ("disjoint-instances-condition-unsatisfiable" as ?err) } ;
+
+# @name domain-condition-unsatisfiable
+SELECT DISTINCT ?err ?u ?v ?x
+WHERE { ?u owl:disjointWith ?v .
+        ?x rdfs:domain ?u,?v .
+	BIND ("domain-condition-unsatisfiable" as ?err) } ;
+
+# @name range-condition-unsatisfiable
+SELECT DISTINCT ?err ?u ?v ?x
+WHERE { ?u owl:disjointWith ?v .
+        ?x rdfs:range ?u,?v .
+	BIND ("range-condition-unsatisfiable" as ?err) } ;
+
+# @name complementof-condition-unsatisfiable (OWL 2 RL, cls-com)
+SELECT DISTINCT ?err ?u ?v ?x
+WHERE { ?u owl:complementOf ?v .
+        ?x a ?u,?v .
+	BIND ("complementof-condition-unsatisfiable" as ?err) } ;
+
+### SWCLOS2 ends here - following conditions only in OWL 2 RL!
+
+# @name irreflexive-property (OWL 2 RL, prp-irp)
+SELECT DISTINCT ?err ?x ?p
+WHERE { ?p a owl:IrreflexiveProperty .
+        ?x ?p ?x
+	BIND ("irreflexiveProperty-condition-unsatisfiable" as ?err) } ;
+
+# @name asymmetric-property (OWL 2 RL, prp-asyp)
+SELECT DISTINCT ?err ?p ?x ?y
+WHERE { ?p a owl:AsymmetricProperty .
+        ?x ?p ?y .
+        ?y ?p ?x
+	BIND ("AsymmetricProperty-condition-unsatisfiable" as ?err) } ;
+
+# @name property-disjoint-with (OWL 2 RL, prp-pdw)
+SELECT DISTINCT ?err ?p1 ?p2 ?x ?y
+WHERE { ?p1 owl:propertyDisjointWith ?p2 .
+        ?x ?p1 ?y ;
+           ?p2 ?y .
+	BIND ("propertyDisjointWith-condition-unsatisfiable" as ?err) } ;
+
+## All Disjoint Properties (OWL 2 RL, prp-adp)
+
+# @name prp-adp-Declare owl:members as a listProperty to list-handler.rq
+INSERT DATA { :prpadp :listProperty owl:members } ;
+
+# @name prp-adp
+SELECT DISTINCT ?err ?p1 ?p2 ?u ?v
+WHERE { ?x a owl:AllDisjointProperties ;
+           owl:members ?head ;
+           :element [ :value ?p1 ; :index ?index1 ] ;
+	   :element [ :value ?p2 ; :index ?index2 ] .
+	?u ?p1 ?v ;
+	   ?p2 ?v .
+	FILTER ( ?index1 < ?index2 )
+	BIND ("AllDisjointProperties false: same resources linked with different disjoint properties" as ?err) } ;
+
+## Source - target individual - assertion 1 (OWL 2 RL, prp-npa1)
+
+# @name prp-npa1
+SELECT DISTINCT ?err ?x ?i1 ?p ?i2
+WHERE { ?x owl:sourceIndividual ?i1 ;
+           owl:assertionProperty ?p ;
+           owl:targetIndividual ?i2 .
+        ?i1 ?p ?i2 .
+	BIND ("npa1-condition-unsatisfiable" as ?err) } ;
+
+## Source - target value - assertion 2 (OWL 2 RL, prp-npa2)
+
+# @name prp-npa2
+SELECT DISTINCT ?err ?x ?i ?p ?lt
+WHERE { ?x owl:sourceIndividual ?i ;
+           owl:assertionProperty ?p ;
+           owl:targetValue ?lt .
+        ?i ?p ?lt .
+	BIND ("npa2-condition-unsatisfiable" as ?err) } ;
+
+## Type nothing (OWL 2 RL, cls-nothing2)
+
+# @name cls-nothing2
+SELECT DISTINCT ?err ?x
+WHERE { ?x a owl:Nothing
+	BIND ("Type-nothing-condition-unsatisfiable" as ?err) } ;
+
+# @name Breaking-maxcardinality-zero (OWL 2 RL, cls-maxc1)
+SELECT DISTINCT ?err ?x ?u ?p ?y
+WHERE { ?x owl:maxCardinality "0"^^xsd:nonNegativeInteger ;
+           owl:onProperty ?p .
+        ?u a ?x ;
+           ?p ?y
+	BIND ("Breaking-maxCardinality-zero-condition-unsatisfiable" as ?err) } ;
+
+# @name Max-qualified-cardinality-1 (OWL 2 RL, cls-maxqc1)
+SELECT DISTINCT ?err ?x ?u ?p ?y ?c
+WHERE { ?x owl:maxQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+           owl:onProperty ?p ;
+           owl:onClass ?c .
+        ?u a ?x ;
+           ?p ?y .
+        ?y a ?c
+	BIND ("Max-qualified-cardinality-1-condition-unsatisfiable" as ?err) } ;
+
+# @name Max-qualified-cardinality-2 (OWL 2 RL, cls-maxqc2)
+
+SELECT DISTINCT ?err ?x ?u ?p ?y
+WHERE { ?x owl:maxQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
+           owl:onProperty ?p ;
+           owl:onClass owl:Thing .
+        ?u a ?x ;
+           ?p ?y .
+	BIND ("Max-qualified-cardinality-2-condition-unsatisfiable" as ?err) } ;
+
+## All-disjoint-classes (OWL 2 RL, cax-adc)
+# INTERESTING-CASE
+
+# @name cax-adc-Declare
+INSERT DATA { :caxadc :listProperty owl:members } ;
+
+# @name cax-adc
+SELECT DISTINCT ?err ?x ?c1 ?c2
+WHERE { ?x a owl:AllDisjointClasses ;
+           owl:members ?y ;
+	   :element [ :value ?c1 ; :index ?i1 ] ;
+	   :element [ :value ?c2 ; :index ?i2 ] .
+        ?z a ?c1,?c2 .
+	FILTER ( ?i1 < ?i2 )
+	BIND ("cax-adc false: AllDisjointClasses have common subject" as ?err) } ;
+
+# Unsupported literal type (OWL 2 RL, dt-not-type)
+
+# @name dt-not-type
+SELECT DISTINCT ?err ?lt ?dt
+WHERE { ?lt a ?dt .
+        FILTER ( isLiteral(?lt) )
+	FILTER NOT EXISTS { ?dt a rdfs:Datatype }
+	FILTER ( ?dt != owl:Thing ) # MJR: Added this, because all literals are currently also owl:Things
+	BIND ("dt-not-type false: Unsupported literal type" as ?err) } ;

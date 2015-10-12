@@ -1,0 +1,166 @@
+# P-Entailment Rules
+
+# Intended to be used jointly with D*-entailment rules.
+
+# Sources:
+# P-entailment: http://www.springerlink.com/content/366474250nl35412/
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+## rdfp1 (functional property, ter Horst)
+
+INSERT { ?v owl:sameAs ?w }
+WHERE { ?p a owl:FunctionalProperty .
+        ?u ?p ?v .
+	?u ?p ?w .
+	FILTER ( isIRI(?v) || isBlank(?v) )
+	FILTER (!sameTerm(?v,?w)) } ;
+
+## rdfp2 (inverse functional Property, ter Horst)
+
+INSERT { ?u owl:sameAs ?v }
+WHERE { ?p a owl:InverseFunctionalProperty .
+        ?u ?p ?w .
+	?v ?p ?w
+	FILTER (!sameTerm(?u,?v)) } ;
+
+## rdfp3, sym (symmetric property, ter Horst, SparkWave)
+
+INSERT { ?y ?p ?x }
+WHERE { ?p a owl:SymmetricProperty .
+        ?x ?p ?y
+	FILTER ( isIRI(?y) || isBlank(?y) ) } ;
+
+## rdfp4 (transitive property, ter Horst)
+
+# Corresponds to rdfs5 (subproperties, ter Horst)
+
+INSERT { ?u ?p ?w }
+WHERE { ?p a owl:TransitiveProperty .
+        ?u ?p ?v .
+	?v ?p ?w } ;
+
+## rdfp5a (self-evident sameAs, ter Horst)
+
+# Consider to comment out
+
+INSERT { ?v owl:sameAs ?v }
+WHERE { ?v ?p ?w } ;
+
+## rdfp5b (self-evident sameAs, ter Horst)
+
+# Consider to comment out
+
+INSERT { ?w owl:sameAs ?w }
+WHERE { ?v ?p ?w
+        FILTER ( isIRI(?w) || isBlank(?w) ) } ;
+
+## rdfp6 (reflexive sameAs, ter Horst)
+
+INSERT { ?w owl:sameAs ?v }
+WHERE { ?v owl:sameAs ?w
+        FILTER ( isIRI(?w) || isBlank(?w) ) } ;
+
+## rdfp7 (transitive sameAs, ter Horst)
+
+INSERT { ?u owl:sameAs ?w }
+WHERE { ?u owl:sameAs ?v .
+        ?v owl:sameAs ?w } ;
+
+## rdfp8ax, inv2 (from SparkWave, ter Horst)
+
+INSERT { ?w ?q ?v }
+WHERE { ?p owl:inverseOf ?q .
+        ?v ?p ?w
+        FILTER ( isIRI(?w) || isBlank(?w) )
+        FILTER ( isIRI(?q) || isBlank(?q) ) } ;
+
+## rdfp8bx
+
+INSERT { ?w ?p ?v }
+WHERE { ?p owl:inverseOf ?q .
+        ?v ?q ?w
+        FILTER ( isIRI(?w) || isBlank(?w) ) } ;
+
+## rdfp9 (subsumption on same classes, from ter Horst)
+
+# Should consider the same also for "rdfs:Class"
+
+INSERT { ?v rdfs:subClassOf ?w }
+WHERE { ?v a owl:Class .
+        ?v owl:sameAs ?w } ;
+
+## rdfp10 (subsumption on same properties, from ter Horst)
+
+INSERT { ?p rdfs:subPropertyOf ?q }
+WHERE { ?p a rdf:Property .
+        ?p owl:sameAs ?q } ;
+
+## rdfp11 (property extension through sameAs, from ter Horst)
+
+INSERT { ?u2 ?p ?v2 }
+WHERE { ?u1 ?p ?v1 .
+        ?u1 owl:sameAs ?u2 .
+        ?v1 owl:sameAs ?v2 .
+        FILTER ( isIRI(?u2) || isBlank(?u2) ) } ;
+
+## rdfp12a, rdfp12b (subsumption on equivalentClass, from ter Horst)
+
+INSERT { ?v rdfs:subClassOf ?w .
+         ?w rdfs:subClassOf ?v }
+WHERE { ?v owl:equivalentClass ?w
+        FILTER ( isIRI(?w) || isBlank(?w) ) } ;
+
+## rdfp12c (equivalency from subsumption classes, from ter Horst)
+
+INSERT { ?v owl:equivalentClass ?w }
+WHERE { ?v rdfs:subClassOf ?w .
+        ?w rdfs:subClassOf ?v } ;
+
+## rdfp13a, rdfp13b (subsumption on equivalent property, from ter Horst)
+
+INSERT { ?v rdfs:subPropertyOf ?w .
+         ?w rdfs:subPropertyOf ?v }
+WHERE { ?v owl:equivalentProperty ?w
+        FILTER ( isIRI(?w) || isBlank(?w) ) } ;
+
+## rdfp13c (subsumption on equivalent property, from ter Horst)
+
+INSERT { ?v owl:equivalentProperty ?w }
+WHERE { ?v rdfs:subPropertyOf ?w .
+        ?w rdfs:subPropertyOf ?v } ;
+
+## rdfp14a (filler restriction entailment, from ter Horst, also OWL 2 RL cls-hv2)
+
+INSERT { ?u a ?v }
+WHERE { ?v owl:hasValue ?w ;
+           owl:onProperty ?p .
+        ?u ?p ?w } ;
+
+## rdfp14bx (hasValue definition, from ter Horst, also OWL 2 RL cls-hv1)
+
+INSERT { ?u ?p ?w }
+WHERE { ?v owl:hasValue ?w ;
+           owl:onProperty ?p .
+        ?u a ?v
+        FILTER ( isIRI(?p) || isBlank(?p) ) } ;
+
+## rdfp15 (full existential restriction entailment, from ter Horst, also OWL 2 RL cls-svf1)
+
+INSERT { ?u a ?v }
+WHERE { ?v owl:someValuesFrom ?w ;
+           owl:onProperty ?p .
+        ?u ?p ?x .
+        ?x a ?w } ;
+
+## rdfp16 (allvaluesfrom definition, from ter Horst, also OWL 2 RL cls-avf)
+
+INSERT { ?x a ?w }
+WHERE { ?v owl:allValuesFrom ?w ;
+           owl:onProperty ?p .
+        ?u a ?v ;
+           ?p ?x
+        FILTER ( isIRI(?x) || isBlank(?x) ) } ;
+

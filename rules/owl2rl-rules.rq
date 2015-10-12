@@ -1,0 +1,612 @@
+# OWL 2 RL Rules
+
+# From "OWL 2 Web Ontology Language Profiles (Second Edition), W3C Recommendation 11 December 2012"
+# http://www.w3.org/TR/owl2-profiles/
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+PREFIX : <http://instans.org/>
+
+### Table 4. The Semantics of Equality
+
+# @name eq-ref (partially rdfp5, ter Horst)
+INSERT { ?s owl:sameAs ?s .
+         ?p owl:sameAs ?p .
+	 ?o owl:sameAs ?o }
+WHERE { ?s ?p ?o } ;
+
+# @name eq-sym (also rdfp6, ter Horst)
+INSERT { ?y owl:sameAs ?x }
+WHERE { ?x owl:sameAs ?y } ;
+
+# @name eq-trans (also rdfp7, ter Horst)
+INSERT { ?x owl:sameAs ?z }
+WHERE { ?x owl:sameAs ?y .
+        ?y owl:sameAs ?z } ;
+
+# @name eq-rep-s
+INSERT { ?s2 ?p ?o }
+WHERE { ?s owl:sameAs ?s2 .
+        ?s ?p ?o } ;
+
+# @name eq-rep-p
+INSERT { ?s ?p2 ?o }
+WHERE { ?p owl:sameAs ?p2 .
+        ?s ?p ?o } ;
+
+# @name eq-rep-o
+INSERT { ?s ?p ?o2 }
+WHERE { ?o owl:sameAs ?o2 .
+        ?s ?p ?o } ;
+
+### Table 5. The Semantics of Axioms about Properties
+
+
+
+# @name prp-ap
+INSERT DATA { rdfs:label a owl:AnnotationProperty .
+              rdfs:comment a owl:AnnotationProperty .
+              rdfs:seeAlso a owl:AnnotationProperty .
+              rdfs:isDefinedBy a owl:AnnotationProperty .
+              owl:deprecated a owl:AnnotationProperty .
+              owl:versionInfo a owl:AnnotationProperty .
+              owl:priorVersion a owl:AnnotationProperty .
+              owl:backwardCompatibleWith a owl:AnnotationProperty .
+              owl:incompatibleWith a owl:AnnotationProperty } ;
+
+# (Built-in annotation properties above from: http://www.w3.org/TR/owl2-syntax/#Annotation_Properties)
+
+# @name prp-dom (also: rdfs2, RDF 1.1 Semantics)
+INSERT { ?x a ?c }
+WHERE { ?p rdfs:domain ?c .
+        ?x ?p ?y } ;
+
+# @name prp-rng (also: rdfs3, RDF 1.1 Semantics)
+INSERT { ?y a ?c }
+WHERE { ?p rdfs:range ?c .
+        ?x ?p ?y } ;
+
+# @name prp-fp (also: rdfp1, functional property, ter Horst)
+INSERT { ?v owl:sameAs ?w }
+WHERE { ?p a owl:FunctionalProperty .
+        ?u ?p ?v .
+	?u ?p ?w .
+	FILTER (!sameTerm(?v,?w)) } ;
+
+# @name prp-ifp (also: rdfp2, inverse functional Property, ter Horst)
+INSERT { ?u owl:sameAs ?v }
+WHERE { ?p a owl:InverseFunctionalProperty .
+        ?u ?p ?w .
+	?v ?p ?w
+	FILTER (!sameTerm(?u,?v)) } ;
+
+# @name prp-symp (also: rdfp3, sym, symmetric property, ter Horst, SparkWave)
+INSERT { ?y ?p ?x }
+WHERE { ?p a owl:SymmetricProperty .
+        ?x ?p ?y } ;
+
+# @name prp-trp (also: rdfp4, transitive property, ter Horst)
+INSERT { ?u ?p ?w }
+WHERE { ?p a owl:TransitiveProperty .
+        ?u ?p ?v .
+	?v ?p ?w } ;
+
+# @name prp-spo1 (also: rdfs7, RDF 1.1 Semantics)
+INSERT { ?x ?p2 ?y }
+WHERE { ?p1 rdfs:subPropertyOf ?p2 .
+        ?x ?p1 ?y .
+	FILTER (!sameTerm(?p1,?p2)) } ;
+
+# @name prp-spo2
+INSERT { ?u1 ?p ?unplus1 }
+WHERE { ?p owl:propertyChainAxiom ?x .
+        ?x rdf:first ?p1 .
+	?u1 ?p1 ?u2 .
+	?p :pLast ?pn .
+	?un ?pn ?unplus1 } ;
+
+# Auxiliary list processing for prp-spo2
+
+# @name prp-spo2-Initiate a new list
+INSERT { ?p :prpspo2inithead ?x }
+WHERE { ?p owl:propertyChainAxiom ?x } ;
+
+# @name prp-spo2-FirstStep list elements
+INSERT { ?list :prpspo2head ?nexthead }
+WHERE { ?list :prpspo2inithead ?thishead .
+        ?thishead rdf:rest ?nexthead } ;
+
+# @name prp-spo2-Traverse list elements
+DELETE { ?list :prpspo2head ?thishead }
+INSERT { ?list :prpspo2head ?nexthead }
+WHERE { ?list :prpspo2head ?thishead .
+        ?thishead rdf:rest ?nexthead .
+        FILTER (?nexthead != rdf:nil) } ;
+
+# @name prp-spo2-Terminate (Note the final list element, remove head)
+DELETE { ?list :prpspo2head ?thishead }
+INSERT { ?list :pLast ?pn }
+WHERE { ?list :prpspo2head ?thishead .
+        ?thishead rdf:first ?pn ;
+	          rdf:rest ?nexthead .
+        FILTER (?nexthead = rdf:nil) } ;
+
+# @name prp-eqp1
+INSERT { ?x ?p2 ?y }
+WHERE { ?p1 owl:equivalentProperty ?p2 .
+        ?x ?p1 ?y } ;
+
+# @name prp-eqp2
+INSERT { ?x ?p1 ?y }
+WHERE { ?p1 owl:equivalentProperty ?p2 .
+        ?x ?p2 ?y } ;
+
+# @name prp-inv1 (also rdfp8 (ter Horst), inv2 (SparkWave))
+INSERT { ?y ?p2 ?x }
+WHERE { ?p1 owl:inverseOf ?p2 .
+        ?x ?p1 ?y } ;
+
+# @name prp-inv2
+INSERT { ?y ?p1 ?x }
+WHERE { ?p1 owl:inverseOf ?p2 .
+        ?x ?p2 ?y } ;
+
+## prp-key
+
+# @name prp-key-Initiate a new list
+INSERT { ?c :prpkeyinithead ?u }
+WHERE { ?c owl:hasKey ?u } ;
+
+# @name prp-key-FirstStep
+INSERT { ?c :prpkeyhead ?nexthead }
+WHERE { ?c :prpkeyinithead ?thishead .
+        ?thishead rdf:first ?p .
+	?x a ?c . ?y a ?c .
+	FILTER ( ?x != ?y )
+	?x ?p ?z . ?y ?p ?z .
+        ?thishead rdf:rest ?nexthead } ;
+
+# @name prp-key-Traverse list elements
+DELETE { ?c :prpkeyhead ?thishead }
+INSERT { ?c :prpkeyhead ?nexthead }
+WHERE { ?c :prpkeyhead ?thishead .
+        ?thishead rdf:first ?p .
+	?x a ?c . ?y a ?c .
+	FILTER ( ?x != ?y )
+	?x ?p ?z . ?y ?p ?z .
+        ?thishead rdf:rest ?nexthead .
+        FILTER (?nexthead != rdf:nil) } ;
+
+# @name prp-key-Terminate (Note the final list element, remove head, output result)
+DELETE { ?c :prpkeyhead ?thishead }
+INSERT { ?x owl:sameAs ?y }
+WHERE { ?c :prpkeyhead ?thishead .
+        ?thishead rdf:first ?p .
+	?x a ?c . ?y a ?c .
+	FILTER ( ?x != ?y )
+	?x ?p ?z . ?y ?p ?z .
+        ?thishead rdf:rest ?nexthead .
+        FILTER (?nexthead = rdf:nil) } ;
+
+## Failed attempts on solving prp-key with one query
+
+# Declare owl:hasKey as a listProperty to list-handler.rq
+# INSERT DATA { :prpKey :listProperty owl:hasKey } ;
+
+# INSERT { ?x owl:sameAs ?y }
+# SELECT ?x ?y ?p
+# WHERE { ?c owl:hasKey ?u ;
+#            :element [ :value ?p ] .
+#  	# BIND (?p as ?p2)
+# 	FILTER EXISTS { ?x a ?c .
+#                         ?y a ?c .
+# 	                FILTER ( !sameTerm(?x,?y) )
+# 	                ?x ?p ?z .
+# 	                ?y ?p ?z }
+# } ;
+
+# SELECT ?p ?p2
+# WHERE { ?c owl:hasKey ?u ;
+#            :element [ :value ?p ] .
+#  	BIND (?p as ?p2)
+# 	FILTER EXISTS { ?x a ?c .
+#                         ?y a ?c .
+# 	                FILTER ( !sameTerm(?x,?y) )
+# 	                ?x ?p ?z .
+# 	                ?y ?p ?z }
+# #	FILTER EXISTS { ?x ?p ?z }
+# } ;
+
+# This one has the aligned solutions in ?p and the whole set of predicate keys in ?p2.
+# If this could be taken to the level where it only triggers if ?p2 has no other values than the ones
+# found in ?p, it could be usable.
+
+# SELECT ?x ?y ?p ?p2
+# WHERE { ?c owl:hasKey ?u ;
+#            :element [ :value ?p ] ;
+#            :element [ :value ?p2 ] .	   
+# 	?x a ?c .
+#         ?y a ?c .
+# 	FILTER ( ?x != ?y )
+# 	?x ?p ?z .
+# 	?y ?p ?z
+# } ;
+
+### Table 6. The Semantics of Classes
+
+## cls-thing
+## cls-nothing1
+
+# @name cls-thing-and-cls-nothing1
+INSERT DATA { owl:Thing a owl:Class .
+              owl:Nothing a owl:Class } ;
+
+## cls-int1
+
+# @name cls-int1-Initiate a new list
+INSERT { ?c :clsint1initkeyhead ?x }
+WHERE { ?c owl:intersectionOf ?x } ;
+
+# @name cls-int1-FirstStep list elements
+INSERT { ?c :clsint1keyhead ?nexthead }
+WHERE { ?c :clsint1initkeyhead ?thishead .
+        ?thishead rdf:first ?cn .
+	?y a ?cn .
+        ?thishead rdf:rest ?nexthead } ;
+
+# @name cls-int1-Traverse list elements
+DELETE { ?c :clsint1keyhead ?thishead }
+INSERT { ?c :clsint1keyhead ?nexthead }
+WHERE { ?c :clsint1keyhead ?thishead .
+        ?thishead rdf:first ?cn .
+	?y a ?cn .
+        ?thishead rdf:rest ?nexthead .
+        FILTER (?nexthead != rdf:nil) } ;
+
+# @name cls-int1-Terminate (Note the final list element, remove head, output result)
+DELETE { ?c :clsint1keyhead ?thishead }
+INSERT { ?y a ?c }
+WHERE { ?c :clsint1keyhead ?thishead .
+        ?thishead rdf:first ?cn .
+	?y a ?cn .
+        ?thishead rdf:rest ?nexthead .
+        FILTER (?nexthead = rdf:nil) } ;
+
+## cls-int2
+
+# @name cls-int2-Declare owl:intersectionOf as a listProperty to list-handler.rq
+INSERT DATA { :clsint2 :listProperty owl:intersectionOf } ;
+
+# @name cls-int2
+INSERT { ?y a ?cn }
+WHERE { ?c owl:intersectionOf ?x ;
+           :element [ :value ?cn ] .
+	?y a ?c } ;
+
+## cls-uni
+
+# @name cls-uni-Declare owl:unionOf as a listProperty to list-handler.rq
+INSERT DATA { :clsuni :listProperty owl:unionOf } ;
+
+# @name cls-uni
+INSERT { ?y a ?c }
+WHERE { ?c owl:unionOf ?x ;
+           :element [ :value ?ci ] .
+	?y a ?ci } ;
+
+# @name cls-svf1 (also rdfp15, full existential restriction entailment, ter Horst)
+INSERT { ?u a ?v }
+WHERE { ?v owl:someValuesFrom ?w ;
+           owl:onProperty ?p .
+        ?u ?p ?x .
+        ?x a ?w } ;
+
+# @name cls-svf2
+INSERT { ?u a ?x }
+WHERE { ?x owl:someValuesFrom owl:Thing ;
+           owl:onProperty ?p .
+        ?u ?p ?v } ;
+
+# @name cls-avf (also rdfp16, allvaluesfrom definition, ter Horst)
+INSERT { ?x a ?w }
+WHERE { ?v owl:allValuesFrom ?w ;
+           owl:onProperty ?p .
+        ?u a ?v ;
+           ?p ?x } ;
+
+# @name cls-hv1 (also rdfp14bx, hasValue definition, ter Horst)
+INSERT { ?u ?p ?w }
+WHERE { ?v owl:hasValue ?w ;
+           owl:onProperty ?p .
+        ?u a ?v } ;
+
+# @name cls-hv2 (also rdfp14a, filler restriction entailment, ter Horst)
+INSERT { ?u a ?v }
+WHERE { ?v owl:hasValue ?w ;
+           owl:onProperty ?p .
+        ?u ?p ?w } ;
+
+# @name cls-maxc2
+INSERT { ?y1 owl:sameAs ?y2 }
+WHERE { ?x owl:maxCardinality "1"^^xsd:nonNegativeInteger ;
+           owl:onProperty ?p .
+        ?u a ?x ;
+           ?p ?y1 ;
+           ?p ?y2 .
+	FILTER ( !sameTerm(?y1,?y2) ) } ;
+
+# @name cls-maxqc3
+INSERT { ?y1 owl:sameAs ?y2 }
+WHERE { ?x owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+           owl:onProperty ?p ;
+           owl:onClass ?c .
+        ?u a ?x ;
+           ?p ?y1 .
+        ?y1 a ?c .
+        ?u ?p ?y2 .
+        ?y2 a ?c .
+	FILTER ( !sameTerm(?y1,?y2) ) } ;
+
+# @name cls-maxqc4
+INSERT { ?y1 owl:sameAs ?y2 }
+WHERE { ?x owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+           owl:onProperty ?p ;
+           owl:onClass owl:Thing .
+        ?u a ?x ;
+           ?p ?y1 ;
+           ?p ?y2 .
+	FILTER ( !sameTerm(?y1,?y2) ) } ;
+
+## cls-oo
+
+# @name cls-oo-Declare owl:oneOf as a listProperty to list-handler.rq
+INSERT DATA { :clsoo :listProperty owl:oneOf } ;
+
+# @name cls-oo
+INSERT { ?yn a ?c }
+WHERE { ?c owl:oneOf ?x ;
+           :element [ :value ?yn ] } ;
+
+### Table 7: The Semantics of Class Axioms
+
+# @name cax-sco (also rdfs9, RDF 1.1 Semantics)
+INSERT { ?a a ?y }
+WHERE { ?x rdfs:subClassOf ?y .
+        ?a a ?x } ;
+
+# @name cax-eqc1
+INSERT { ?x a ?c2 }
+WHERE { ?c1 owl:equivalentClass ?c2 .
+        ?x a ?c1
+	FILTER ( !sameTerm(?c1,?c2) ) } ;
+
+# @name cax-eqc2
+INSERT { ?x a ?c1 }
+WHERE { ?c1 owl:equivalentClass ?c2 .
+        ?x a ?c2
+	FILTER ( !sameTerm(?c1,?c2) ) } ;
+
+### Table 8: The Semantics of Datatypes
+
+## NOTE: Many of these rules produce significant overhead, usability to be evaluated case-by-case
+
+# @name dt-type1
+INSERT DATA { rdf:PlainLiteral a rdfs:Datatype .
+              rdf:XMLLiteral a rdfs:Datatype .
+              rdfs:Literal a rdfs:Datatype .
+              xsd:decimal a rdfs:Datatype .
+              xsd:integer a rdfs:Datatype .
+              xsd:nonNegativeInteger a rdfs:Datatype .
+              xsd:nonPositiveInteger a rdfs:Datatype .
+              xsd:positiveInteger a rdfs:Datatype .
+              xsd:negativeInteger a rdfs:Datatype .
+              xsd:long a rdfs:Datatype .
+              xsd:int a rdfs:Datatype .
+              xsd:short a rdfs:Datatype .
+              xsd:byte a rdfs:Datatype .
+              xsd:unsignedLong a rdfs:Datatype .
+              xsd:unsignedInt a rdfs:Datatype .
+              xsd:unsignedShort a rdfs:Datatype .
+              xsd:unsignedByte a rdfs:Datatype .
+              xsd:float a rdfs:Datatype .
+              xsd:double a rdfs:Datatype .
+              xsd:string a rdfs:Datatype .
+              xsd:normalizedString a rdfs:Datatype .
+              xsd:token a rdfs:Datatype .
+              xsd:language a rdfs:Datatype .
+              xsd:Name a rdfs:Datatype .
+              xsd:NCName a rdfs:Datatype .
+              xsd:NMTOKEN a rdfs:Datatype .
+              xsd:boolean a rdfs:Datatype .
+              xsd:hexBinary a rdfs:Datatype .
+              xsd:base64Binary a rdfs:Datatype .
+              xsd:anyURI a rdfs:Datatype .
+              xsd:dateTime a rdfs:Datatype .
+              xsd:dateTimeStamp a rdfs:Datatype } ;
+
+## dt-type2
+
+# Note: Split into two phases, because in a single query the datatype() tries to evaluate also when the
+# filter does not pass, resulting in a multitude of warnings about unsuitable arguments for datatype().
+
+# @name dt-type2-subject
+INSERT { :dttype2 :candidate ?s }
+WHERE { ?s ?p ?o .
+        FILTER ( isLiteral(?s) ) } ;
+
+# @name dt-type2-object
+INSERT { :dttype2 :candidate ?o }
+WHERE { ?s ?p ?o .
+        FILTER ( isLiteral(?o) ) } ;
+
+# @name dt-type2-final
+DELETE { :dttype2 :candidate ?lit }
+INSERT { ?lit a ?type }
+WHERE { :dttype2 :candidate ?lit
+	BIND ( datatype(?lit) AS ?type ) } ;
+
+# @name dt-eq
+INSERT { ?lt1 owl:sameAs ?lt2 }
+WHERE { ?lt1 a ?type .
+	?lt2 a ?type .
+	FILTER ( !sameTerm(?lt1,?lt2) )
+        ?type a rdfs:Datatype .
+	FILTER ( ?lt1=?lt2 ) } ;
+
+# Note: dt-eq currently doesn't take type compatibility into account, i.e. only the same type classifies as sameAs.
+
+# @name dt-diff
+INSERT { ?lt1 owl:differentFrom ?lt2 }
+WHERE { ?lt1 a ?type .
+	?lt2 a ?type .
+	FILTER ( !sameTerm(?lt1,?lt2) )
+        ?type a rdfs:Datatype .
+	FILTER ( ?lt1!=?lt2 ) } ;
+
+### Table 9: The Semantics of Schema Vocabulary
+
+# @name scm-cls
+INSERT { ?c rdfs:subClassOf ?c ;
+            owl:equivalentClass ?c ;
+            rdfs:subClassOf owl:Thing .
+         owl:Nothing rdfs:subClassOf ?c }
+WHERE { ?c a owl:Class } ;
+
+# @name scm-sco (also rdfs11, RDF 1.1 Semantics)
+INSERT { ?a rdfs:subClassOf ?c }
+WHERE { ?a rdfs:subClassOf ?b .
+        ?b rdfs:subClassOf ?c } ;
+
+# @name scm-eqc1 (also rdfp12a, rdfp12b, subsumption on equivalentClass, ter Horst)
+INSERT { ?v rdfs:subClassOf ?w .
+         ?w rdfs:subClassOf ?v }
+WHERE { ?v owl:equivalentClass ?w } ;
+
+# @name scm-eqc2 (also rdfp12c, equivalency from subsumption classes, ter Horst)
+INSERT { ?v owl:equivalentClass ?w }
+WHERE { ?v rdfs:subClassOf ?w .
+        ?w rdfs:subClassOf ?v
+	FILTER ( !sameTerm(?v,?w) )} ;
+
+# @name scm-op
+INSERT { ?p rdfs:subPropertyOf ?p ;
+            owl:equivalentProperty ?p }
+WHERE { ?p a owl:ObjectProperty } ;
+
+# @name scm-dp
+INSERT { ?p rdfs:subPropertyOf ?p ;
+            owl:equivalentProperty ?p }
+WHERE { ?p a owl:DatatypeProperty } ;
+
+# @name scm-spo (also rdfs5, RDF 1.1 Semantics)
+INSERT { ?a rdfs:subPropertyOf ?c }
+WHERE { ?a rdfs:subPropertyOf ?b .
+        ?b rdfs:subPropertyOf ?c } ;
+
+# @name scm-eqp1 (also rdfp13a, rdfp13b, subsumption on equivalent property, ter Horst)
+INSERT { ?v rdfs:subPropertyOf ?w .
+         ?w rdfs:subPropertyOf ?v }
+WHERE { ?v owl:equivalentProperty ?w } ;
+
+# @name scm-eqp2 (also rdfp13c, subsumption on equivalent property, ter Horst)
+INSERT { ?v owl:equivalentProperty ?w }
+WHERE { ?v rdfs:subPropertyOf ?w .
+        ?w rdfs:subPropertyOf ?v
+	FILTER ( !sameTerm(?v,?w) ) } ;
+
+# @name scm-dom1
+INSERT { ?p rdfs:domain ?c2 }
+WHERE { ?p rdfs:domain ?c1 .
+        ?c1 rdfs:subClassOf ?c2
+	FILTER ( !sameTerm(?c1,?c2) ) } ;
+
+# @name scm-dom2
+INSERT { ?p1 rdfs:domain ?c }
+WHERE { ?p2 rdfs:domain ?c .
+        ?p1 rdfs:subPropertyOf ?p2
+	FILTER ( !sameTerm(?p1,?p2) ) } ;
+
+# @name scm-rng1
+INSERT { ?p rdfs:range ?c2 }
+WHERE { ?p rdfs:range ?c1 .
+        ?c1 rdfs:subClassOf ?c2
+	FILTER ( !sameTerm(?c1,?c2) ) } ;
+
+# @name scm-rng2
+INSERT { ?p1 rdfs:range ?c }
+WHERE { ?p2 rdfs:range ?c .
+        ?p1 rdfs:subPropertyOf ?p2
+	FILTER ( !sameTerm(?p1,?p2) ) } ;
+
+# @name scm-hv
+INSERT { ?c1 rdfs:subClassOf ?c2 }
+WHERE { ?c1 owl:hasValue ?i ;
+            owl:onProperty ?p1 .
+        ?c2 owl:hasValue ?i ;
+            owl:onProperty ?p2 .
+        ?p1 rdfs:subPropertyOf ?p2
+	FILTER ( !sameTerm(?c1,?c2) )
+	FILTER ( !sameTerm(?p1,?p2) ) } ;
+
+# @name scm-svf1
+INSERT { ?c1 rdfs:subClassOf ?c2 }
+WHERE { ?c1 owl:someValuesFrom ?y1 ;
+            owl:onProperty ?p .
+        ?c2 owl:someValuesFrom ?y2 ;
+            owl:onProperty ?p .
+        ?y1 rdfs:subClassOf ?y2 .
+	FILTER ( !sameTerm(?c1,?c2) )
+	FILTER ( !sameTerm(?y1,?y2) ) } ;
+
+# @name scm-svf2
+INSERT { ?c1 rdfs:subClassOf ?c2 }
+WHERE { ?c1 owl:someValuesFrom ?y ;
+            owl:onProperty ?p1 .
+        ?c2 owl:someValuesFrom ?y ;
+            owl:onProperty ?p2 .
+        ?p1 rdfs:subPropertyOf ?p2 .
+	FILTER ( !sameTerm(?c1,?c2) )
+	FILTER ( !sameTerm(?p1,?p2) ) } ;
+
+# @name scm-avf1
+INSERT { ?c1 rdfs:subClassOf ?c2 }
+WHERE { ?c1 owl:allValuesFrom ?y1 ;
+            owl:onProperty ?p .
+        ?c2 owl:allValuesFrom ?y2 ;
+            owl:onProperty ?p .
+        ?y1 rdfs:subClassOf ?y2 .
+	FILTER ( !sameTerm(?c1,?c2) )
+	FILTER ( !sameTerm(?y1,?y2) ) } ;
+
+# @name scm-avf2
+INSERT { ?c2 rdfs:subClassOf ?c1 }
+WHERE { ?c1 owl:allValuesFrom ?y ;
+            owl:onProperty ?p1 .
+        ?c2 owl:allValuesFrom ?y ;
+            owl:onProperty ?p2 .
+        ?p1 rdfs:subPropertyOf ?p2 .
+	FILTER ( !sameTerm(?c1,?c2) )
+	FILTER ( !sameTerm(?p1,?p2) ) } ;
+
+## scm-int
+
+# @name scm-int-Declare owl:intersectionOf as a listProperty to list-handler.rq
+INSERT DATA { :scmint :listProperty owl:intersectionOf } ;
+
+# @name scm-int
+INSERT { ?c rdfs:subClassOf ?cn }
+WHERE { ?c owl:intersectionOf ?x ;
+           :element [ :value ?cn ] } ;
+
+## scm-uni
+
+# @name scm-uni-Declare owl:unionOf as a listProperty to list-handler.rq
+INSERT DATA { :scmuni :listProperty owl:unionOf } ;
+
+# @name scm-uni
+INSERT { ?cn rdfs:subClassOf ?c }
+WHERE { ?c owl:unionOf ?x ;
+           :element [ :value ?cn ] } ;
+

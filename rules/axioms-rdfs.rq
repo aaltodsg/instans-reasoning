@@ -1,0 +1,87 @@
+# Source: RDF 1.1 Semantics W3C Recommendation 25 February 2014
+# Section: 9 RDFS Interpretations
+# http://www.w3.org/TR/rdf11-mt/#rdfs-interpretations
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+INSERT DATA {
+  rdf:type rdfs:domain rdfs:Resource .
+  rdfs:domain rdfs:domain rdf:Property .
+  rdfs:range rdfs:domain rdf:Property .
+  rdfs:subPropertyOf rdfs:domain rdf:Property .
+  rdfs:subClassOf rdfs:domain rdfs:Class .
+  rdf:subject rdfs:domain rdf:Statement .
+  rdf:predicate rdfs:domain rdf:Statement .
+  rdf:object rdfs:domain rdf:Statement .
+  rdfs:member rdfs:domain rdfs:Resource . 
+  rdf:first rdfs:domain rdf:List .
+  rdf:rest rdfs:domain rdf:List .
+  rdfs:seeAlso rdfs:domain rdfs:Resource .
+  rdfs:isDefinedBy rdfs:domain rdfs:Resource .
+  rdfs:comment rdfs:domain rdfs:Resource .
+  rdfs:label rdfs:domain rdfs:Resource .
+  rdf:value rdfs:domain rdfs:Resource .
+
+  rdf:type rdfs:range rdfs:Class .
+  rdfs:domain rdfs:range rdfs:Class .
+  rdfs:range rdfs:range rdfs:Class .
+  rdfs:subPropertyOf rdfs:range rdf:Property .
+  rdfs:subClassOf rdfs:range rdfs:Class .
+  rdf:subject rdfs:range rdfs:Resource .
+  rdf:predicate rdfs:range rdfs:Resource .
+  rdf:object rdfs:range rdfs:Resource .
+  rdfs:member rdfs:range rdfs:Resource .
+  rdf:first rdfs:range rdfs:Resource .
+  rdf:rest rdfs:range rdf:List .
+  rdfs:seeAlso rdfs:range rdfs:Resource .
+  rdfs:isDefinedBy rdfs:range rdfs:Resource .
+  rdfs:comment rdfs:range rdfs:Literal .
+  rdfs:label rdfs:range rdfs:Literal .
+  rdf:value rdfs:range rdfs:Resource .
+
+  rdf:Alt rdfs:subClassOf rdfs:Container .
+  rdf:Bag rdfs:subClassOf rdfs:Container .
+  rdf:Seq rdfs:subClassOf rdfs:Container .
+  rdfs:ContainerMembershipProperty rdfs:subClassOf rdf:Property .
+
+  rdfs:isDefinedBy rdfs:subPropertyOf rdfs:seeAlso .
+
+  rdfs:Datatype rdfs:subClassOf rdfs:Class .
+} ;
+
+# Containers
+
+# MJR: This is a bit tricky: It does not make sense to generate an infinite number of axiomatic triples, if they are never used.
+# The following solution generates those triples, if they are seen somewhere in the data. This is probably not the perfect solution,
+# because those triples will not exist before they have occurred?
+
+# Can rdf:_n appear as a subject or object? The following solution generates the related axiomatic triple, if rdf:_n appears in either
+# subject or predicate position.
+
+# rdf:_n as subject
+INSERT {
+  ?s rdf:type rdfs:ContainerMembershipProperty ;
+     rdfs:domain rdfs:Resource ;
+     rdfs:range rdfs:Resource }
+WHERE {
+  ?s ?p ?o
+  FILTER (strStarts(str(?s),"http://www.w3.org/1999/02/22-rdf-syntax-ns#_"))
+  FILTER NOT EXISTS { ?s rdf:type rdfs:ContainerMembershipProperty ;
+                         rdfs:domain rdfs:Resource ;
+                         rdfs:range rdfs:Resource }
+} ;
+
+# rdf:_n as predicate
+INSERT {
+  ?p rdf:type rdfs:ContainerMembershipProperty ;
+     rdfs:domain rdfs:Resource ;
+     rdfs:range rdfs:Resource }
+WHERE {
+  ?s ?p ?o
+  FILTER (strStarts(str(?p),"http://www.w3.org/1999/02/22-rdf-syntax-ns#_"))
+  FILTER NOT EXISTS { ?p rdf:type rdfs:ContainerMembershipProperty ;
+                         rdfs:domain rdfs:Resource ;
+                         rdfs:range rdfs:Resource .  }
+} ;
+

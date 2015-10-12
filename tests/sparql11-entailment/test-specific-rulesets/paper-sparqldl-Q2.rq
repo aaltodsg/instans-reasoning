@@ -1,0 +1,20 @@
+### Minimum rule-set to solve paper-sparqldl-Q2.rq
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+## extra2: paper-sparqldl-Q2 - NOT GOOD
+
+# owl:intersectionOf
+# MJR: This implementation handles only rdfs:subClassOf membership relations, how 
+# However, it creates lists longer than 2 elements and avoids calling a class an intersection of itself.
+
+INSERT {
+  ?c0 owl:intersectionOf ( ?c1 ?c2 ) }
+WHERE { ?c0 a owl:Class ;
+            rdfs:subClassOf ?c1 ;
+            rdfs:subClassOf ?c2 .
+	FILTER (!sameTerm(?c1,?c2))
+	FILTER (!sameTerm(?c0,?c1))
+	FILTER (!sameTerm(?c0,?c2)) } ;

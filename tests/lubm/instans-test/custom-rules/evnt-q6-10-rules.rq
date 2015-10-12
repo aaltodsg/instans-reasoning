@@ -1,0 +1,75 @@
+# LUBM Queries 6-10
+# Minimal set of Rules
+# Event processing version => Considers inputs from static and changing (event-specific) graphs
+
+# From "OWL 2 Web Ontology Language Profiles (Second Edition), W3C Recommendation 11 December 2012"
+# http://www.w3.org/TR/owl2-profiles/
+
+BASE <http://instans.org/>
+PREFIX : <http:instans.org/default#>
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+### Table 6. The Semantics of Classes
+
+## cls-int1
+
+# @name cls-int1-Initiate a new list
+INSERT { GRAPH <static> { ?c :clsint1inithead ?x } }
+WHERE { GRAPH <static> { ?c owl:intersectionOf ?x } } ;
+
+# Preserve the inithead, as there may be multiple instances, which need to be compared to the rule.
+
+# @name cls-int1-FirstStep list elements
+INSERT { GRAPH <static> { ?c :clsint1keyhead ?nexthead } }
+WHERE { GRAPH <static> { ?c :clsint1inithead ?thishead .
+                         ?thishead rdf:first ?cn .
+			 ?thishead rdf:rest ?nexthead }
+        ?y a ?cn
+	# TODO: Test removing the next filter, should not be necessary
+        FILTER (?nexthead != rdf:nil) } ;
+
+# @name cls-int1-Traverse list elements
+DELETE { GRAPH <static> { ?c :clsint1keyhead ?thishead } }
+INSERT { GRAPH <static> { ?c :clsint1keyhead ?nexthead } }
+WHERE { GRAPH <static> { ?c :clsint1keyhead ?thishead .
+                         ?thishead rdf:first ?cn .
+			 ?thishead rdf:rest ?nexthead }
+        ?y a ?cn
+        FILTER (?nexthead != rdf:nil) } ;
+
+# @name cls-int1-Terminate : Note the final list element, remove head, output result
+DELETE { GRAPH <static> { ?c :clsint1keyhead ?thishead } }
+INSERT { ?y a ?c }
+WHERE { GRAPH <static> { ?c :clsint1keyhead ?thishead .
+                         ?thishead rdf:first ?cn .
+			 ?thishead rdf:rest ?nexthead }
+	?y a ?cn
+        FILTER (?nexthead = rdf:nil) } ;
+
+
+### Table 7: The Semantics of Class Axioms
+
+## cax-sco (also rdfs9, RDF 1.1 Semantics)
+
+# @name cax-sco
+INSERT { ?a a ?y }
+WHERE { GRAPH <static> { ?x rdfs:subClassOf ?y }
+        ?a a ?x } ;
+
+### Table 9: The Semantics of Schema Vocabulary
+
+## scm-svf1
+
+# @name scm-svf1
+INSERT { GRAPH <static> { ?c1 rdfs:subClassOf ?c2 } }
+WHERE { GRAPH <static> {
+        ?c1 owl:someValuesFrom ?y1 ;
+            owl:onProperty ?p .
+        ?c2 owl:someValuesFrom ?y2 ;
+            owl:onProperty ?p .
+        ?y1 rdfs:subClassOf ?y2 }
+	FILTER ( !sameTerm(?c1,?c2) )
+	FILTER ( !sameTerm(?y1,?y2) ) } ;

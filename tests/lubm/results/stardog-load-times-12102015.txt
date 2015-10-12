@@ -1,0 +1,41 @@
+Stardog database creation loading times
+Date: 12.10.2015
+OS X Yosemite 10.10.5
+Processor 2.7 GHz Intel Core i5
+16 GB 1867 MHz DDR3 memory
+
+Stardog server 3.1.4 started on Mon Oct 12 09:03:39 EEST 2015.
+
+## Without univ-bench.ttl ontology:
+
+Uni1 (= 1 University)
+Bulk loading data to new database lubm1.
+Loaded 100,545 triples to lubm1 from 1 file(s) in 00:00:01.616 @ 62.2K triples/sec.
+Successfully created database 'lubm1'.
+
+Uni5 (= 5 Universities)
+Bulk loading data to new database lubm5.
+Loaded 624,534 triples to lubm5 from 1 file(s) in 00:00:03.086 @ 202.4K triples/sec.
+Successfully created database 'lubm5'.
+
+Uni10 (= 10 Universities)
+Bulk loading data to new database lubm10.
+Loaded 1,272,577 triples to lubm10 from 1 file(s) in 00:00:06.261 @ 203.3K triples/sec.
+Successfully created database 'lubm10'.
+
+## With univ-bench.ttl ontology:
+
+Uni1 (= 1 University)
+Bulk loading data to new database lubm1.
+Loaded 100,838 triples to lubm1 from 2 file(s) in 00:00:01.345 @ 75.0K triples/sec.
+Successfully created database 'lubm1'.
+
+Uni5 (= 5 Universities)
+Bulk loading data to new database lubm5.
+Loaded 624,827 triples to lubm5 from 2 file(s) in 00:00:03.730 @ 167.5K triples/sec.
+Successfully created database 'lubm5'.
+
+Uni10 (= 10 Universities)
+Bulk loading data to new database lubm10.
+Loaded 1,272,870 triples to lubm10 from 2 file(s) in 00:00:07.038 @ 180.9K triples/sec.
+Successfully created database 'lubm10'.

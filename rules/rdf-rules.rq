@@ -1,0 +1,43 @@
+# RDF Entailment Rules
+
+# From:
+# RDF 1.1 Semantics: http://www.w3.org/TR/rdf11-mt/#patterns-of-rdf-entailment-informative
+# D* entailment: http://www.springerlink.com/content/366474250nl35412/
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+## rdfD1 (RDF 1.1 Semantics, also a combination of "lg" and "gl" from D* entailment)
+
+# xxx aaa ”sss”ˆˆddd .
+# for ddd in D
+
+# Entails:
+# xxx aaa _:nnn .
+# _:nnn rdf:type ddd .
+
+INSERT { ?x ?a [ a ?d ] }
+WHERE {
+  ?x ?a ?s .
+  # Only Literal objects are candidates
+  BIND (IF(isLiteral(?s),datatype(?s),?unbound) as ?d)
+  # Pass if a datatype is found
+  FILTER (bound(?d))
+} ;
+
+## rdfD2 (RDF 1.1 Semantics)
+
+# Note: Generates a lot of data, and usefulness is limited. Consider to comment out.
+
+# Should this be conditional on literal objects in D?
+
+INSERT { ?p a rdf:Property } 
+WHERE { ?s ?p ?o } ;
+
+## Boolean-specific "idiosyncratic entailment pattern" (RDF 1.1 Semantics)
+
+INSERT { ?a ?p ?v }
+WHERE { ?a ?p "true"^^xsd:boolean ; 
+           ?p "false"^^xsd:boolean .
+        ?v a xsd:boolean } ;
+

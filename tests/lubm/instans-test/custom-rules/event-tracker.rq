@@ -1,0 +1,42 @@
+# Event tracker
+
+# Tracks the changing of events/windows in the main input and updates
+# input redirection accordingly.
+
+# Specialized for the LUBM benchmark, each department represents an "event"
+
+BASE <http://instans.org/>
+
+PREFIX : <http:instans.org/default#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX ub: <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#>
+
+# @name Activegraph-Init
+INSERT DATA { GRAPH <control> { :activegraph :address <static> } } ;
+
+# @name Change-to-event-mode
+DELETE { GRAPH <control> { :activegraph :address <static> } }
+INSERT { GRAPH <control> { :activegraph :address <event> } }
+WHERE { ?x a ub:Department 
+        GRAPH <control> { :activegraph :address <static> } } ;
+
+# @name Clean-previous-event
+DELETE { ?s ?p ?o }
+WHERE {
+  ?x a owl:Ontology
+  GRAPH <control> { :activegraph :address <event> }
+  ?s ?p ?o
+} ;
+
+# @name Move-static-input
+DELETE { ?s ?p ?o }
+INSERT { GRAPH <static> { ?s ?p ?o } }
+WHERE {
+  GRAPH <control> { :activegraph :address <static> }
+  ?s ?p ?o
+  # Do not eat the change marker
+  FILTER NOT EXISTS { ?x a ub:Department } } ;
+
+# SELECT *
+# WHERE { GRAPH <static> { ?s ?p ?o } } ;

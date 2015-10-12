@@ -1,0 +1,70 @@
+# LUBM Queries 6, 7
+# Minimal set of Rules
+
+# From "OWL 2 Web Ontology Language Profiles (Second Edition), W3C Recommendation 11 December 2012"
+# http://www.w3.org/TR/owl2-profiles/
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+PREFIX : <http://instans.org/>
+
+### Table 6. The Semantics of Classes
+
+## cls-int1
+
+# @name cls-int1-Initiate a new list
+INSERT { ?c :clsint1inithead ?x }
+WHERE { ?c owl:intersectionOf ?x } ;
+
+# Preserve the inithead, as there may be multiple instances, which need to be compared to the rule.
+
+# @name cls-int1-FirstStep list elements
+INSERT { ?c :clsint1keyhead ?nexthead }
+WHERE { ?c :clsint1inithead ?thishead .
+        ?thishead rdf:first ?cn .
+	?y a ?cn .
+        ?thishead rdf:rest ?nexthead .
+        FILTER (?nexthead != rdf:nil) } ;
+
+# @name cls-int1-Traverse list elements
+DELETE { ?c :clsint1keyhead ?thishead }
+INSERT { ?c :clsint1keyhead ?nexthead }
+WHERE { ?c :clsint1keyhead ?thishead .
+        ?thishead rdf:first ?cn .
+	?y a ?cn .
+        ?thishead rdf:rest ?nexthead .
+        FILTER (?nexthead != rdf:nil) } ;
+
+# @name cls-int1-Terminate : Note the final list element, remove head, output result
+DELETE { ?c :clsint1keyhead ?thishead }
+INSERT { ?y a ?c }
+WHERE { ?c :clsint1keyhead ?thishead .
+        ?thishead rdf:first ?cn .
+	?y a ?cn .
+        ?thishead rdf:rest ?nexthead .
+        FILTER (?nexthead = rdf:nil) } ;
+
+### Table 7: The Semantics of Class Axioms
+
+## cax-sco (also rdfs9, RDF 1.1 Semantics)
+
+# @name cax-sco
+INSERT { ?a a ?y }
+WHERE { ?x rdfs:subClassOf ?y .
+        ?a a ?x } ;
+
+### Table 9: The Semantics of Schema Vocabulary
+
+## scm-svf1
+
+# @name scm-svf1
+INSERT { ?c1 rdfs:subClassOf ?c2 }
+WHERE { ?c1 owl:someValuesFrom ?y1 ;
+            owl:onProperty ?p .
+        ?c2 owl:someValuesFrom ?y2 ;
+            owl:onProperty ?p .
+        ?y1 rdfs:subClassOf ?y2 .
+	FILTER ( !sameTerm(?c1,?c2) )
+	FILTER ( !sameTerm(?y1,?y2) ) } ;

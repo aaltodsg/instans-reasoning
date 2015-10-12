@@ -1,0 +1,104 @@
+# LUBM all necessary rules
+# The set of entailment rules to complete all LUBM queries
+# Event processing version => Considers split between static and dynamic information
+
+# Original rules from "OWL 2 Web Ontology Language Profiles (Second Edition), W3C Recommendation 11 December 2012"
+# http://www.w3.org/TR/owl2-profiles/
+
+BASE <http://instans.org/>
+PREFIX : <http:instans.org/default#>
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+### Table 5. The Semantics of Axioms about Properties
+
+# @name prp-dom (also: rdfs2, RDF 1.1 Semantics)
+INSERT { ?x a ?c }
+WHERE { GRAPH <static> { ?p rdfs:domain ?c }
+        ?x ?p ?y } ;
+
+# @name prp-spo1 (also: rdfs7, RDF 1.1 Semantics)
+INSERT { ?x ?p2 ?y }
+WHERE { GRAPH <static> { ?p1 rdfs:subPropertyOf ?p2 }
+        ?x ?p1 ?y .
+	FILTER (!sameTerm(?p1,?p2)) } ;
+
+# @name prp-inv1 (also rdfp8 (ter Horst), inv2 (SparkWave))
+INSERT { ?y ?p2 ?x }
+WHERE { GRAPH <static> { ?p1 owl:inverseOf ?p2 }
+        ?x ?p1 ?y } ;
+
+# @name prp-trp (also: rdfp4, transitive property, ter Horst)
+INSERT { ?u ?p ?w }
+WHERE { GRAPH <static> { ?p a owl:TransitiveProperty }
+        ?u ?p ?v .
+	?v ?p ?w } ;
+
+### Table 6. The Semantics of Classes
+
+## cls-int1
+
+# @name cls-int1-Initiate a new list
+INSERT { GRAPH <static> { ?c :clsint1inithead ?x } }
+WHERE { GRAPH <static> { ?c owl:intersectionOf ?x } } ;
+
+# Preserve the inithead, as there may be multiple instances, which need to be compared to the rule.
+
+# @name cls-int1-FirstStep list elements
+INSERT { GRAPH <static> { ?c :clsint1keyhead ?nexthead } }
+WHERE { GRAPH <static> { ?c :clsint1inithead ?thishead .
+                         ?thishead rdf:first ?cn .
+			 ?thishead rdf:rest ?nexthead }
+        ?y a ?cn
+	# TODO: Test removing the next filter, should not be necessary
+        FILTER (?nexthead != rdf:nil) } ;
+
+# @name cls-int1-Traverse list elements
+DELETE { GRAPH <static> { ?c :clsint1keyhead ?thishead } }
+INSERT { GRAPH <static> { ?c :clsint1keyhead ?nexthead } }
+WHERE { GRAPH <static> { ?c :clsint1keyhead ?thishead .
+                         ?thishead rdf:first ?cn .
+			 ?thishead rdf:rest ?nexthead }
+        ?y a ?cn
+        FILTER (?nexthead != rdf:nil) } ;
+
+# @name cls-int1-Terminate : Note the final list element, remove head, output result
+DELETE { GRAPH <static> { ?c :clsint1keyhead ?thishead } }
+INSERT { ?y a ?c }
+WHERE { GRAPH <static> { ?c :clsint1keyhead ?thishead .
+                         ?thishead rdf:first ?cn .
+			 ?thishead rdf:rest ?nexthead }
+	?y a ?cn
+        FILTER (?nexthead = rdf:nil) } ;
+
+# @name cls-svf1 (also rdfp15, full existential restriction entailment, ter Horst)
+INSERT { ?u a ?v }
+WHERE { GRAPH <static> { ?v owl:someValuesFrom ?w ; owl:onProperty ?p }
+        ?u ?p ?x .
+        ?x a ?w } ;
+
+### Table 7: The Semantics of Class Axioms
+
+## cax-sco (also rdfs9, RDF 1.1 Semantics)
+
+# @name cax-sco
+INSERT { ?a a ?y }
+WHERE { GRAPH <static> { ?x rdfs:subClassOf ?y }
+        ?a a ?x } ;
+
+### Table 9: The Semantics of Schema Vocabulary
+
+## scm-svf1
+
+# @name scm-svf1
+INSERT { GRAPH <static> { ?c1 rdfs:subClassOf ?c2 } }
+WHERE { GRAPH <static> {
+        ?c1 owl:someValuesFrom ?y1 ;
+            owl:onProperty ?p .
+        ?c2 owl:someValuesFrom ?y2 ;
+            owl:onProperty ?p .
+        ?y1 rdfs:subClassOf ?y2 }
+	FILTER ( !sameTerm(?c1,?c2) )
+	FILTER ( !sameTerm(?y1,?y2) ) } ;

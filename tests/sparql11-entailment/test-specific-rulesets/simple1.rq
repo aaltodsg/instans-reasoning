@@ -1,0 +1,18 @@
+# Special rule to resolve test: simple1
+
+# OWL-rules taylored to correspond to the SPARQL entailment tests in:
+# http://www.w3.org/2009/sparql/implementations/
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+## extra4: simple1.rq
+
+INSERT {
+  ?x a [ owl:intersectionOf ( ?c0 ?c1 ) ] }
+WHERE { ?c0 a owl:Class .
+        ?c1 a owl:Class .
+        ?x a ?c0 ;
+	   a ?c1 .
+	FILTER (!sameTerm(?c0,?c1)) } ;

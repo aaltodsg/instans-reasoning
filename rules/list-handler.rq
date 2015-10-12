@@ -1,0 +1,65 @@
+# List Handler
+
+# Created by mikko.rinne@aalto.fi 26.8.2015
+# 28.8.2015 MJR Revised to improve selectivity between different rules.
+
+# The purpose of this library is to convert RDF lists (with first-rest format)
+# to collections of elements. This was created as patch to cover the lack of '*' property paths
+# in the current version of INSTANS.
+
+# The library assumes that all included list properties are listed as type :listProperty in the main graph as follows:
+# owl:members a :listProperty
+
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+PREFIX : <http://instans.org/>
+
+# SELECT ?element
+# WHERE { :mylist :element [ :value ?val ] } ;
+
+# @name list-handler-Initiate a new list
+INSERT { ?list ?rule_init [ :nexthead ?head ; :listindex 1 ] }
+WHERE { ?rule :listProperty ?lprop .
+        ?list ?lprop ?head
+	BIND (IRI(concat(str(?rule),"-init")) AS ?rule_init) } ;
+
+# Preserve the initial list header, as the list may be traversed multiple times to compare.
+
+# @name list-handler-FirstStep (add the first list element, increment index)
+INSERT { ?list ?rule [ :nexthead ?nexthead ; :listindex ?nextindex ; ] ;
+               :element [ :value ?val ; :index ?index ] }
+WHERE { ?rule :listProperty ?lprop .
+        BIND (IRI(concat(str(?rule),"-init")) AS ?rule_init)
+        ?list ?lprop ?head ;
+              ?rule_init [ :nexthead ?thishead ; :listindex ?index ] .
+        ?thishead rdf:first ?val ;
+	          rdf:rest ?nexthead .
+#         FILTER (?nexthead != rdf:nil)   # Lists with 1 element will not reach termination, problem anywhere?
+	BIND (?index+1 as ?nextindex) } ;
+
+# @name list-handler-Traverse (add new list element, increment index)
+DELETE { ?list ?rule ?ref .
+         ?ref :nexthead ?thishead ;
+	      :listindex ?index }
+INSERT { ?list ?rule [ :nexthead ?nexthead ; :listindex ?nextindex ; ] ;
+               :element [ :value ?val ; :index ?index ] }
+WHERE { ?rule :listProperty ?lprop .
+        ?list ?lprop ?head ;
+              ?rule [ :nexthead ?thishead ; :listindex ?index ] .
+        ?thishead rdf:first ?val ;
+	          rdf:rest ?nexthead .
+        FILTER (?nexthead != rdf:nil)
+	BIND (?index+1 as ?nextindex) } ;
+
+# @name list-handler-Terminate (Add final list element, remove head and index)
+DELETE { ?list :nexthead ?thishead ;
+               :listindex ?index }
+INSERT { ?list :element [ :value ?val ; :index ?index ] }
+WHERE { ?rule :listProperty ?lprop .
+        ?list ?lprop ?head ;
+              ?rule [ :nexthead ?thishead ; :listindex ?index ] .
+        ?thishead rdf:first ?val ;
+	          rdf:rest ?nexthead .
+        FILTER (?nexthead = rdf:nil) } ;

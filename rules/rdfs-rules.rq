@@ -1,0 +1,95 @@
+# RDFS Rules
+
+# Sources:
+# RDF 1.1 Semantics: http://www.w3.org/TR/rdf11-mt/#patterns-of-rdfs-entailment-informative
+# Munoz 2007: http://link.springer.com/chapter/10.1007/978-3-540-72667-8_6
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+## rdfs1 (RDF 1.1 Semantics)
+# any IRI aaa in D
+# Entails:
+# aaa rdf:type rdfs:Datatype .
+
+# Additionally: http://www.w3.org/TR/rdf11-concepts/#section-Datatypes
+# "RDF re-uses many of the XML Schema built-in datatypes, and defines two additional non-normative datatypes, rdf:HTML and rdf:XMLLiteral. The list of datatypes supported by an implementation is determined by its recognized datatype IRIs."
+
+# Based on these references the following lists the datatypes supported by INSTANS.
+
+INSERT DATA { xsd:decimal a rdfs:Datatype .
+              xsd:integer a rdfs:Datatype .
+              xsd:float a rdfs:Datatype .
+              xsd:double a rdfs:Datatype .
+              xsd:string a rdfs:Datatype .
+              xsd:boolean a rdfs:Datatype .
+              xsd:dateTime a rdfs:Datatype .
+              xsd:dayTimeDuration a rdfs:Datatype } ;
+	      
+# @name rdfs2 (RDF 1.1 Semantics, D*)
+INSERT { ?s a ?c }
+WHERE { ?s ?p ?o .
+        ?p rdfs:domain ?c } ;
+
+# @name rdfs3 (RDF 1.1 Semantics, D*)
+INSERT { ?o a ?c }
+WHERE { ?s ?p ?o .
+        ?p rdfs:range ?c } ;
+
+## rdfs4a (RDF 1.1 Semantics, D*)
+
+# Note: Generates a lot of data, and usefulness is limited. Consider to comment out.
+
+# @name rdfs4a
+INSERT { ?s a rdfs:Resource }
+WHERE { ?s ?p ?o } ;
+
+## rdfs4b (RDF 1.1 Semantics, D*)
+
+# Note: Generates a lot of data, and usefulness is limited. Consider to comment out.
+
+# @name rdfs4b
+INSERT { ?o a rdfs:Resource }
+WHERE { ?s ?p ?o } ;
+
+# @name rdfs5 (RDF 1.1 Semantics, D*)
+INSERT { ?a rdfs:subPropertyOf ?c }
+WHERE { ?a rdfs:subPropertyOf ?b .
+        ?b rdfs:subPropertyOf ?c } ;
+
+# @name rdfs6 (RDF 1.1 Semantics, D*)
+INSERT { ?s rdfs:subPropertyOf ?s }
+WHERE { ?s a rdf:Property } ;
+
+# @name rdfs7x (RDF 1.1 Semantics, D*)
+INSERT { ?s ?q ?o }
+WHERE { ?s ?p ?o .
+        ?p rdfs:subPropertyOf ?q
+	FILTER (!sameTerm(?p,?q)) } ;
+
+# @name rdfs8 (RDF 1.1 Semantics, D*)
+INSERT { ?s rdfs:subClassOf rdfs:Resource }
+WHERE { ?s a rdfs:Class } ;
+
+# @name rdfs9 (RDF 1.1 Semantics, D*)
+INSERT { ?a a ?y }
+WHERE { ?x rdfs:subClassOf ?y .
+        ?a a ?x } ;
+
+# @name rdfs10 (RDF 1.1 Semantics, D*)
+INSERT { ?s rdfs:subClassOf ?s }
+WHERE { ?s rdf:type rdfs:Class } ;
+
+# @name rdfs11 (RDF 1.1 Semantics, D*)
+INSERT { ?a rdfs:subClassOf ?c }
+WHERE { ?a rdfs:subClassOf ?b .
+        ?b rdfs:subClassOf ?c } ;
+
+# @name rdfs12 (RDF 1.1 Semantics, D*)
+INSERT { ?x rdfs:subPropertyOf rdfs:member }
+WHERE { ?x a rdfs:ContainerMembershipProperty } ;
+
+# @name rdfs13 (RDF 1.1 Semantics, D*)
+INSERT { ?x rdfs:subClassOf rdfs:Literal }
+WHERE { ?x a rdfs:Datatype } ;
+

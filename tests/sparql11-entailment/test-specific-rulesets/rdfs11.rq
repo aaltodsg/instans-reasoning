@@ -1,0 +1,21 @@
+# rho-df rules
+
+# Sources:
+# Munoz 2007: http://link.springer.com/chapter/10.1007/978-3-540-72667-8_6
+# Munoz 2009: http://www.sciencedirect.com/science/article/pii/S1570826809000249
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+## 2.(b) Subproperty (Munoz 2007, also rdfs7 from RDF 1.1 Semantics)
+INSERT { ?s ?q ?o }
+WHERE { ?s ?p ?o .
+        ?p rdfs:subPropertyOf ?q
+	FILTER (!sameTerm(?p,?q)) } ;
+
+## 6.(b) Subproperty reflexivity (Munoz 2007):
+INSERT { ?a rdfs:subPropertyOf ?a .
+         ?b rdfs:subPropertyOf ?b }
+WHERE { ?a rdfs:subPropertyOf ?b
+        FILTER ( !sameTerm(?a,?b) ) } ;
+
