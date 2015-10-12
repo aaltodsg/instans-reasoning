@@ -49,4 +49,4 @@ one level up.
   * `./batch-speed-evnt.sh` Measure INSTANS execution speed using event-based
     memory handling (each department cleared after processing) on
     optimised query-specific rule sets 
-  * Command line examples to execute any individual test case can be found in the above shell scripts.
+4. Command line examples to execute any individual test case can be found in the above shell scripts.
