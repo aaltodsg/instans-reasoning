@@ -16,8 +16,7 @@ publication.
 
 ## Results
 
-The results collected by authors can be found in the "results"-folder
-one level up.
+The results collected by authors can be found in the [results-folder](https://github.com/aaltodsg/instans-reasoning/tree/master/tests/lubm/results).
 
 ## Installation and execution
 
@@ -30,6 +29,9 @@ one level up.
     answers with different reasoners from simpler (and faster) to more
     complex. If "diff" indicates no difference, the results are
     identical.
+  * `./batch-comp-best-reasoners.sh` Verifies the diff over the best
+    (fastest and most compact) reasoner found for each query. Excludes
+    the ones requiring the "OWL" reasoner.
   * `./batch-speed.sh` Times Jena execution using the fastest
     reasoners, which produced the correct answers. Please note that
     the full OWL reasoner may not complete.

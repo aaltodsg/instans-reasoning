@@ -1,0 +1,25 @@
+Jena LUBM Results
+13.10.2015
+OS X Yosemite 10.10.5
+Processor 2.7 GHz Intel Core i5
+16 GB 1867 MHz DDR3 memory
+
+Comparison of the best reasoners / query. The ones requiring OWL reasoner are skipped here.
+
+./batch-comp-best-reasoners.sh 
+Jena,q1,Uni1,norules,00001.35739385200000020
+q1 diff results for Jena (left) and sample (right)
+Jena,q2,Uni1,norules,000024.9065442150
+q2 diff results for Jena (left) and sample (right)
+Jena,q3,Uni1,norules,00001.5408098550
+q3 diff results for Jena (left) and sample (right)
+Jena,q4,Uni1,RDFSSimple,00001.5881010650
+q4 diff results for Jena (left) and sample (right)
+Jena,q5,Uni1,RDFSSimple,00002.0430294910
+q5 diff results for Jena (left) and sample (right)
+Jena,q11,Uni1,OWLMicro,00003.82720717700000050
+q11 diff results for Jena (left) and sample (right)
+Jena,q13,Uni1,OWLMicro,00002.5519076130
+q13 diff results for Jena (left) and sample (right)
+Jena,q14,Uni1,norules,00001.5505782950
+q14 diff results for Jena (left) and sample (right)

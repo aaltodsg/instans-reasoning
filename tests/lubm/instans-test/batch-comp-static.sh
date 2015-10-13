@@ -11,7 +11,8 @@ CRP="$PT/custom-rules"
 ./static-comp-with-reason.sh q6 "-r $CRP/q6-10-rules.rq" answers_query6
 ./static-comp-with-reason.sh q7 "-r $CRP/q6-10-rules.rq" answers_query7
 ./static-comp-with-reason.sh q8 "-r $CRP/q6-10-rules.rq" answers_query8
-./static-comp-with-reason.sh q9 "-r $CRP/q6-10-rules.rq" answers_query9
+# Q9 crashes the heap with static
+# ./static-comp-with-reason.sh q9 "-r $CRP/q6-10-rules.rq" answers_query9
 ./static-comp-with-reason.sh q10 "-r $CRP/q6-10-rules.rq" answers_query10
 ./static-comp-with-reason.sh q11 "-r $CRP/q11-rules.rq" answers_query11
 ./static-comp-with-reason.sh q12 "-r $CRP/q12-rules.rq" answers_query12

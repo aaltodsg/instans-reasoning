@@ -182,7 +182,6 @@ WHERE { ?x owl:maxQualifiedCardinality "0"^^xsd:nonNegativeInteger ;
 	BIND ("Max-qualified-cardinality-2-condition-unsatisfiable" as ?err) } ;
 
 ## All-disjoint-classes (OWL 2 RL, cax-adc)
-# INTERESTING-CASE
 
 # @name cax-adc-Declare
 INSERT DATA { :caxadc :listProperty owl:members } ;

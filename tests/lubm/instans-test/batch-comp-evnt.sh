@@ -1,4 +1,4 @@
-# INSTANS batch comparison to sample answers using event-based rules and memory handling
+# INSTANS batch comparison to sample answers using event-based rules and processing
 
 ./evnt-comp-no-reason.sh q1 answers_query1
 ./evnt-comp-no-reason.sh q2 answers_query2

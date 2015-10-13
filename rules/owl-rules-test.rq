@@ -20,10 +20,10 @@ WHERE { ?p owl:inverseOf ?q } ;
 INSERT { owl:Nothing rdfs:subClassOf ?x }
 WHERE { ?x a owl:Class } ;
 
-## extra2: paper-sparqldl-Q2 - NOT GOOD
+## extra2: paper-sparqldl-Q2
 
 # owl:intersectionOf
-# MJR: This implementation handles only rdfs:subClassOf membership relations, how 
+# MJR: This implementation handles only rdfs:subClassOf membership relations.
 # However, it creates lists longer than 2 elements and avoids calling a class an intersection of itself.
 
 INSERT {
@@ -35,58 +35,9 @@ WHERE { ?c0 a owl:Class ;
 	FILTER (!sameTerm(?c0,?c1))
 	FILTER (!sameTerm(?c0,?c2)) } ;
 
-## paper-sparqldl-Q3
-
-# owl:disjointWith vs. owl:complementOf. Added as owl rule6b.
-# MJR: Not sure if the assumption is legal.
-# Requires rdfs11.
-
-## paper-sparql-parent4
-
-# owl:minCardinality
-# Implemented simply as inserting a "minCardinality 1" specification, if there is at least one such property.
-# Currently commented out, a:
-# a) Cardinality restrictions make little sense in streaming environments.
-# b) INSTANS doesn't support xsd:nonNegativeInteger, so paper-sparql-parent4 doesn't match with this.
-
-# INSERT { ?s rdf:type [
-#        a owl:Restriction ;
-#        owl:onProperty ?p ;
-#        owl:minCardinality "1"^^xsd:integer  ] . } 
-# WHERE { ?s ?p ?o .
-#         ?p a owl:ObjectProperty } ;
-
-# SELECT *
-# WHERE { ?s rdf:type [
-#        a owl:Restriction ;
-#        owl:onProperty ?p ;
-#        owl:minCardinality "1"^^xsd:integer  ] . } ;
-
-## simple4
-
-# Attempted solution below does not yet work as desired.
-# Also looks like this task is much better solved with SPARQL UNION than trying to constantly
-# generate entailments from a stream.
-
-# INSERT { 
-#    ?y a [
-#        a owl:Class ;
-#        owl:unionOf ( ?x1 ?x2 )
-#    ] . 
-# }
-# WHERE { 
-#    ?x1 a owl:Class .
-#    ?x2 a owl:Class .
-#    ?y a ?x1 .
-#    ?y a ?x2 .
-#    FILTER (!sameTerm(?x1,?x2))
-#    FILTER (!isBlank(?y))
-#    FILTER (!isBlank(?x1))
-#    FILTER (!isBlank(?x2))} ;
-
 ## extra3: sparqldl-12.rq
 
-# MJR: What is the actual criteria of something being in the domain of owl:Thing?
+# Note: What is the actual criteria of something being in the domain of owl:Thing?
 # This version passes the test, but should it rather apply to e.g. all subjects?
 
 INSERT { ?x rdfs:domain owl:Thing }

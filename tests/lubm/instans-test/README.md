@@ -17,8 +17,7 @@ publication.
 
 ## Results
 
-The results collected by authors can be found in the "results"-folder
-one level up.
+The results collected by authors can be found in the [results-folder](https://github.com/aaltodsg/instans-reasoning/tree/master/tests/lubm/results).
 
 ## Installation and execution
 

@@ -18,7 +18,8 @@ The tests are expected to be functional.
 1. Install [INSTANS](https://github.com/aaltodsg/instans)
 2. Set `$INSTANS_HOME` environment variable to point to the root directory of INSTANS.
 3. The following batch files can be executed without parameters:
-  * `./batch-comp-instans.sh` Compare INSTANS results to reference answers, using custom rules for each test.
+  * `./batch-comp-instans.sh` Compare INSTANS results to reference
+    answers, using custom rules for each test. A [sample result file](https://github.com/aaltodsg/instans-reasoning/blob/master/tests/sparql11-entailment/results/sample-batch-comp-13102015.txt) is available.
   * `./batch-run-instans.sh` Execute all tests, which have correctly
     reproduced the reference answers, using custom rules for each test.
 4. Please note that the sets above do not include the 27 tests, which

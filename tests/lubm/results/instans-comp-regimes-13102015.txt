@@ -1,0 +1,20 @@
+INSTANS LUBM Results
+13.10.2015
+OS X Yosemite 10.10.5
+Processor 2.7 GHz Intel Core i5
+16 GB 1867 MHz DDR3 memory
+
+INSTANS 0.3.0.0
+Heap 32GB.
+
+Comparison results using static processing and pre-specified
+entailment regimes.
+
+./batch-comp-regimes.sh
+q4 rhodf-rules.rq diff results for Instans (left) and sample (right)
+q4 rdfs-rules.rq diff results for Instans (left) and sample (right)
+q5 rhodf-rules.rq diff results for Instans (left) and sample (right)
+q5 dstar-rules.rq diff results for Instans (left) and sample (right)
+q5 rdfs-rules.rq diff results for Instans (left) and sample (right)
+q11 rdfp-rules.rq diff results for Instans (left) and sample (right)
+q13 dstar-rules.rq rdfp-rules.rq diff results for Instans (left) and sample (right)

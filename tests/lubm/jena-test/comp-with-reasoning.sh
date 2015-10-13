@@ -23,6 +23,8 @@ PR=`pwd`
 OP="$PR/ontology"
 QP="$PR/queries"
 DP="$PR/data"
+AP="$PR/answers"
+
 
 cd "$REASONERJENA_HOME"
 
@@ -33,7 +35,7 @@ Echo "Jena,$1,$2,$4,$JENATIME"
 cd "$PT"
 
 tail -n +2 jena_unsorted.csv | tr -d '\r' | sort > jena_result.csv
-tail -n +2 ../answers/$3.csv | sort > sample_result.csv
+tail -n +2 $AP/$3.csv | sort > sample_result.csv
 
 echo $1 "diff results for Jena (left) and sample (right)"
 diff -y -W 150 --suppress-common-lines jena_result.csv sample_result.csv

@@ -1,0 +1,26 @@
+INSTANS LUBM Results
+13.10.2015
+OS X Yosemite 10.10.5
+Processor 2.7 GHz Intel Core i5
+16 GB 1867 MHz DDR3 memory
+
+INSTANS 0.3.0.0
+Heap 32GB.
+
+Comparison results using event-based processing and query-optimised rulesets.
+
+./batch-comp-evnt.sh 
+q1 norules diff results for Instans (left) and sample (right)
+q2 norules diff results for Instans (left) and sample (right)
+q3 norules diff results for Instans (left) and sample (right)
+q4 evnt-q4-rules diff results for Instans (left) and sample (right)
+q5 evnt-q5-owl2rl-rules diff results for Instans (left) and sample (right)
+q6 evnt-q6-10-rules diff results for Instans (left) and sample (right)
+q7 evnt-q6-10-rules diff results for Instans (left) and sample (right)
+q8 evnt-q6-10-rules diff results for Instans (left) and sample (right)
+q9 evnt-q6-10-rules diff results for Instans (left) and sample (right)
+q10 evnt-q6-10-rules diff results for Instans (left) and sample (right)
+q11 evnt-q11-rules diff results for Instans (left) and sample (right)
+q12 evnt-q12-rules diff results for Instans (left) and sample (right)
+q13 evnt-q13-rules diff results for Instans (left) and sample (right)
+q14 norules diff results for Instans (left) and sample (right)
