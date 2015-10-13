@@ -4,9 +4,9 @@ PT=`pwd`
 CRP="$PT/custom-rules"
 
 # 5 Universities
-# ./evnt-speed-no-reason.sh q1 Uni5
+./evnt-speed-no-reason.sh q1 Uni5
 # ./evnt-speed-no-reason.sh q2 Uni5
-# ./evnt-speed-no-reason.sh q3 Uni5
+./evnt-speed-no-reason.sh q3 Uni5
 ./evnt-speed-with-reason.sh q4 Uni5 "-r $CRP/evnt-q4-rules.rq"
 ./evnt-speed-with-reason.sh q5 Uni5 "-r $CRP/evnt-q5-owl2rl-rules.rq"
 ./evnt-speed-with-reason.sh q6 Uni5 "-r $CRP/evnt-q6-10-rules.rq"

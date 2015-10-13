@@ -1,0 +1,41 @@
+INSTANS SPARQL Test Suite Diff Results
+13.10.2015
+OS X Yosemite 10.10.5
+Processor 2.7 GHz Intel Core i5
+16 GB 1867 MHz DDR3 memory
+
+INSTANS 0.3.0.0
+Heap 32GB.
+
+./batch-comp-instans.sh
+rdfs01 diff results for Instans (left) and sample (right)
+rdfs02 diff results for Instans (left) and sample (right)
+rdfs03 diff results for Instans (left) and sample (right)
+rdfs04 diff results for Instans (left) and sample (right)
+rdfs05 diff results for Instans (left) and sample (right)
+rdfs06 diff results for Instans (left) and sample (right)
+rdfs07 diff results for Instans (left) and sample (right)
+rdfs09 diff results for Instans (left) and sample (right)
+rdfs11 diff results for Instans (left) and sample (right)
+paper-sparqldl-Q1 diff results for Instans (left) and sample (right)
+paper-sparqldl-Q1-rdfs diff results for Instans (left) and sample (right)
+paper-sparqldl-Q4 diff results for Instans (left) and sample (right)
+sparqldl-02 diff results for Instans (left) and sample (right)
+sparqldl-03 diff results for Instans (left) and sample (right)
+sparqldl-10 diff results for Instans (left) and sample (right)
+parent3 diff results for Instans (left) and sample (right)
+paper-sparqldl-Q2 diff results for Instans (left) and sample (right)
+paper-sparqldl-Q3 diff results for Instans (left) and sample (right)
+sparqldl-12 diff results for Instans (left) and sample (right)
+sparqldl-13 diff results for Instans (left) and sample (right)
+parent5 diff results for Instans (left) and sample (right)
+parent9 diff results for Instans (left) and sample (right)
+parent10 diff results for Instans (left) and sample (right)
+simple1 diff results for Instans (left) and sample (right)
+simple2 diff results for Instans (left) and sample (right)
+simple3 diff results for Instans (left) and sample (right)
+simple4 diff results for Instans (left) and sample (right)
+simple5 diff results for Instans (left) and sample (right)
+simple6 diff results for Instans (left) and sample (right)
+simple7 diff results for Instans (left) and sample (right)
+simple8 diff results for Instans (left) and sample (right)

@@ -32,7 +32,7 @@ CRP="$PT/custom-rules"
 ./static-speed-with-reason.sh q7 Uni10 "-r $CRP/q6-10-rules.rq"
 ./static-speed-with-reason.sh q8 Uni10 "-r $CRP/q6-10-rules.rq"
 # Skipping Q9 - static crashes heap
-./static-speed-with-reason.sh q9 Uni10 "-r $CRP/q6-10-rules.rq"
+# ./static-speed-with-reason.sh q9 Uni10 "-r $CRP/q6-10-rules.rq"
 ./static-speed-with-reason.sh q10 Uni10 "-r $CRP/q6-10-rules.rq"
 ./static-speed-with-reason.sh q11 Uni10 "-r $CRP/q11-rules.rq"
 ./static-speed-with-reason.sh q12 Uni10 "-r $CRP/q12-rules.rq"
