@@ -1,0 +1,100 @@
+Stardog LUBM Results
+8.3.2016
+OS X Yosemite 10.10.5
+Processor 2.7 GHz Intel Core i5
+16 GB 1867 MHz DDR3 memory
+
+Server stopped and started between each test with reasoner. Stability issues observer with the server running continuously with reasoner on.
+
+$ ./batch-speed-no-reason.sh
+
+Empty-query,lubm100,noreasoner,1,01.916
+Empty-query,lubm100,noreasoner,2,01.577
+Empty-query,lubm100,noreasoner,3,01.621
+Empty-query,lubm100,noreasoner,4,01.574
+q1,lubm100,noreasoner,1,01.622
+q1,lubm100,noreasoner,2,01.572
+q1,lubm100,noreasoner,3,01.543
+q1,lubm100,noreasoner,4,02.134
+q2,lubm100,noreasoner,1,04.027
+q2,lubm100,noreasoner,2,02.416
+q2,lubm100,noreasoner,3,02.362
+q2,lubm100,noreasoner,4,02.348
+q3,lubm100,noreasoner,1,01.649
+q3,lubm100,noreasoner,2,01.531
+q3,lubm100,noreasoner,3,01.611
+q3,lubm100,noreasoner,4,01.668
+q14,lubm100,noreasoner,1,04.739
+q14,lubm100,noreasoner,2,03.474
+q14,lubm100,noreasoner,3,03.020
+q14,lubm100,noreasoner,4,02.975
+
+
+$ ./batch-speed-with-reason.sh
+Empty-query,lubm100,reasoner,1,02.233
+Empty-query,lubm100,reasoner,2,02.331
+Empty-query,lubm100,reasoner,3,02.375
+Empty-query,lubm100,reasoner,4,02.353
+q1,lubm100,reasoner,1,02.484
+q1,lubm100,reasoner,2,02.469
+q1,lubm100,reasoner,3,02.798
+q1,lubm100,reasoner,4,02.382
+q2,lubm100,reasoner,1,04.648
+q2,lubm100,reasoner,2,04.642
+q2,lubm100,reasoner,3,04.437
+q2,lubm100,reasoner,4,04.413
+q3,lubm100,reasoner,1,02.346
+q3,lubm100,reasoner,2,02.351
+q3,lubm100,reasoner,3,02.339
+q3,lubm100,reasoner,4,02.266
+q4,lubm100,reasoner,1,02.937
+q4,lubm100,reasoner,2,02.825
+q4,lubm100,reasoner,3,02.774
+q4,lubm100,reasoner,4,02.754
+q5,lubm100,reasoner,1,02.479
+q5,lubm100,reasoner,2,03.517
+q5,lubm100,reasoner,3,02.539
+q5,lubm100,reasoner,4,02.400
+
+# q6 exhausts memory: Unable to allocate 350.3M bytes, direct memory exhausted
+q6,lubm100,reasoner,1,010.886
+q6,lubm100,reasoner,2,010.573
+q6,lubm100,reasoner,3,010.285
+q6,lubm100,reasoner,4,010.464
+
+q7,lubm100,reasoner,1,04.546
+q7,lubm100,reasoner,2,04.352
+q7,lubm100,reasoner,3,04.119
+q7,lubm100,reasoner,4,04.003
+q8,lubm100,reasoner,1,05.388
+q8,lubm100,reasoner,2,04.739
+q8,lubm100,reasoner,3,04.902
+q8,lubm100,reasoner,4,04.746
+q9,lubm100,reasoner,1,05.136
+q9,lubm100,reasoner,2,05.257
+q9,lubm100,reasoner,3,05.017
+q9,lubm100,reasoner,4,05.119
+
+# q10 repeatedly stuck during execution
+q10,lubm100,reasoner,1,07.545
+q10,lubm100,reasoner,2,07.217
+q10,lubm100,reasoner,3,07.219
+
+q11,lubm100,reasoner,1,07.098
+q11,lubm100,reasoner,2,04.001
+q11,lubm100,reasoner,3,02.460
+q11,lubm100,reasoner,4,02.372
+q12,lubm100,reasoner,1,02.604
+q12,lubm100,reasoner,2,02.607
+q12,lubm100,reasoner,3,02.589
+q12,lubm100,reasoner,4,02.700
+q13,lubm100,reasoner,1,02.891
+q13,lubm100,reasoner,2,02.625
+q13,lubm100,reasoner,3,02.871
+q13,lubm100,reasoner,4,02.404
+
+# q14 "GC overhead limit exceeded"
+q14,lubm100,reasoner,1,05.769
+q14,lubm100,reasoner,2,05.744
+q14,lubm100,reasoner,3,05.763
+q14,lubm100,reasoner,4,05.770

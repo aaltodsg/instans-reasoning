@@ -2,6 +2,8 @@
 
 stardog-admin server start
 
+# LUBM5
+
 for i in `seq 1 4` ; do
     # Note! If execution time exceeds 1 minute, remove the sed-part!!
     SAMPLE=$({ time stardog query -f CSV lubm5 "#Empty" > /dev/null; } 2>&1 | grep real | sed 's/[^0-9+\.0-9+]//g' )
@@ -12,6 +14,8 @@ done
 ./speed-no-reason.sh q3 lubm5
 ./speed-no-reason.sh q14 lubm5
 
+# LUBM10
+
 for i in `seq 1 4` ; do
     # Note! If execution time exceeds 1 minute, remove the sed-part!!
     SAMPLE=$({ time stardog query -f CSV lubm10 "#Empty" > /dev/null; } 2>&1 | grep real | sed 's/[^0-9+\.0-9+]//g' )
@@ -21,5 +25,17 @@ done
 ./speed-no-reason.sh q2 lubm10
 ./speed-no-reason.sh q3 lubm10
 ./speed-no-reason.sh q14 lubm10
+
+# LUBM100
+
+# for i in `seq 1 4` ; do
+#     # Note! If execution time exceeds 1 minute, remove the sed-part!!
+#     SAMPLE=$({ time stardog query -f CSV lubm100 "#Empty" > /dev/null; } 2>&1 | grep real | sed 's/[^0-9+\.0-9+]//g' )
+#     Echo "Empty-query,lubm100,noreasoner,$i,$SAMPLE"
+# done
+# ./speed-no-reason.sh q1 lubm100
+# ./speed-no-reason.sh q2 lubm100
+# ./speed-no-reason.sh q3 lubm100
+# ./speed-no-reason.sh q14 lubm100
 
 stardog-admin server stop

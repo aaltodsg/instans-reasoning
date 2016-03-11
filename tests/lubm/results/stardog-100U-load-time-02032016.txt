@@ -1,0 +1,31 @@
+Stardog database creation loading times
+Date: 02.03.2016
+OS X Yosemite 10.10.5
+Processor 2.7 GHz Intel Core i5
+16 GB 1867 MHz DDR3 memory
+
+## Without univ-bench.ttl ontology:
+
+$ stardog-admin db create -n lubm100 ../data/Uni100.ttl
+Bulk loading data to new database lubm100.
+Parsing triples: 100% complete in 00:00:41 (13.9M triples - 333.8K triples/sec)
+Parsing triples finished in 00:00:41.580
+Creating index: 100% complete in 00:00:13 (1027.9K triples/sec)
+Creating index finished in 00:00:13.503
+Computing statistics: 100% complete in 00:00:08 (1583.6K triples/sec)
+Computing statistics finished in 00:00:08.465
+Loaded 13,405,383 triples to lubm100 from 1 file(s) in 00:01:03.636 @ 210.7K triples/sec.
+Successfully created database 'lubm100'.
+
+## With univ-bench.ttl ontology
+
+$ stardog-admin db create -n lubm100 ../ontology/univ-bench.ttl ../data/Uni100.ttl
+Bulk loading data to new database lubm100.
+Parsing triples: 100% complete in 00:00:41 (13.9M triples - 332.1K triples/sec)
+Parsing triples finished in 00:00:41.799
+Creating index: 100% complete in 00:00:13 (1037.5K triples/sec)
+Creating index finished in 00:00:13.378
+Computing statistics: 100% complete in 00:00:06 (1961.9K triples/sec)
+Computing statistics finished in 00:00:06.833
+Loaded 13,405,676 triples to lubm100 from 2 file(s) in 00:01:02.127 @ 215.8K triples/sec.
+Successfully created database 'lubm100'.
