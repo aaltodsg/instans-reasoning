@@ -16,8 +16,7 @@ PREFIX ub: <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#>
 # @name Clean-previous-event
 DELETE { ?s ?p ?o }
 WHERE {
-  ?x a owl:Ontology
-  GRAPH <control> { :activegraph :address <event> }
+  ?x a owl:Ontology .
   ?s ?p ?o
 } ;
 
