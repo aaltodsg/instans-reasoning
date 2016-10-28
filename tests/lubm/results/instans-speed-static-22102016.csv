@@ -1,0 +1,105 @@
+INSTANS LUBM Results
+22.10.2016
+OS X Yosemite 10.10.5
+Processor 2.7 GHz Intel Core i5
+16 GB 1867 MHz DDR3 memory
+
+INSTANS 0.3.0.1
+Heap 32GB.
+
+Departments not processed as events (causes occasional heap overflow problems).
+
+./batch-speed-static.sh
+q1,Uni5,norules,1,29.679178
+q1,Uni5,norules,2,29.555128
+q1,Uni5,norules,3,29.808829
+q1,Uni5,norules,4,29.543510
+q2 heap exhausted
+q3,Uni5,norules,1,30.266688
+q3,Uni5,norules,2,29.971758
+q3,Uni5,norules,3,30.085007
+q3,Uni5,norules,4,30.132603
+q4,Uni5,q4-rules,1,33.437642
+q4,Uni5,q4-rules,2,33.541941
+q4,Uni5,q4-rules,3,32.962647
+q4,Uni5,q4-rules,4,32.742485
+q5,Uni5,q5-owl2rl-rules,1,45.473660
+q5,Uni5,q5-owl2rl-rules,2,45.534706
+q5,Uni5,q5-owl2rl-rules,3,45.571864
+q5,Uni5,q5-owl2rl-rules,4,45.501016
+q6,Uni5,q6-10-rules,1,5045.378924
+q6,Uni5,q6-10-rules,2,5049.285729
+q6,Uni5,q6-10-rules,3,5034.536255
+q6,Uni5,q6-10-rules,4,5032.887574
+q7 heap exhausted
+q8,Uni5,q6-10-rules,1,5069.345182
+q8,Uni5,q6-10-rules,2,5057.436948
+q8,Uni5,q6-10-rules,3,5074.013625
+q8,Uni5,q6-10-rules,4,5036.284773
+q9 heap exhausted
+q10,Uni5,q6-10-rules,1,5011.145875
+q10,Uni5,q6-10-rules,2,5018.441769
+q10,Uni5,q6-10-rules,3,5035.560383
+q10,Uni5,q6-10-rules,4,5016.805978
+q11,Uni5,q11-rules,1,38.561682
+q11,Uni5,q11-rules,2,38.881740
+q11,Uni5,q11-rules,3,38.790643
+q11,Uni5,q11-rules,4,38.730351
+q12 does not finish
+q13,Uni5,q13-rules,1,46.631873
+q13,Uni5,q13-rules,2,46.409552
+q13,Uni5,q13-rules,3,46.648773
+q13,Uni5,q13-rules,4,46.637197
+q14,Uni5,norules,1,30.421681
+q14,Uni5,norules,2,30.652559
+q14,Uni5,norules,3,30.556930
+q14,Uni5,norules,4,30.613279
+q1,Uni10,norules,1,59.738812
+q1,Uni10,norules,2,60.067601
+q1,Uni10,norules,3,59.772602
+q1,Uni10,norules,4,60.040370
+q3,Uni10,norules,1,60.787012
+q3,Uni10,norules,2,59.403249
+q3,Uni10,norules,3,59.576486
+q3,Uni10,norules,4,60.398738
+q4,Uni10,q4-rules,1,67.658429
+q4,Uni10,q4-rules,2,68.326937
+q4,Uni10,q4-rules,3,68.421628
+q4,Uni10,q4-rules,4,68.177323
+q5,Uni10,q5-owl2rl-rules,1,94.389753
+q5,Uni10,q5-owl2rl-rules,2,93.658206
+q5,Uni10,q5-owl2rl-rules,3,93.290549
+q5,Uni10,q5-owl2rl-rules,4,93.232815
+q11,Uni10,q11-rules,1,81.703527
+q11,Uni10,q11-rules,2,81.763818
+q11,Uni10,q11-rules,3,81.184343
+q11,Uni10,q11-rules,4,81.538899
+q13,Uni10,q13-rules,1,94.793976
+q13,Uni10,q13-rules,2,94.183170
+q13,Uni10,q13-rules,3,94.466822
+q13,Uni10,q13-rules,4,94.771226
+q14,Uni10,norules,1,61.673616
+q14,Uni10,norules,2,61.546912
+q14,Uni10,norules,3,61.816949
+q14,Uni10,norules,4,60.752286
+q1,Uni100,norules,1,604.226842
+q1,Uni100,norules,2,602.301600
+q1,Uni100,norules,3,602.145103
+q1,Uni100,norules,4,602.249286
+q3,Uni100,norules,1,612.572676
+q3,Uni100,norules,2,615.084311
+q3,Uni100,norules,3,616.348318
+q3,Uni100,norules,4,613.403955
+q4,Uni100,q4-rules,1,722.955408
+q4,Uni100,q4-rules,2,720.530791
+q4,Uni100,q4-rules,3,721.719992
+q4,Uni100,q4-rules,4,720.061656
+q5 heap exhausted
+q13,Uni100,q13-rules,1,1127.747156
+q13,Uni100,q13-rules,2,1120.785946
+q13,Uni100,q13-rules,3,1120.376706
+q13,Uni100,q13-rules,4,1122.609926
+q14,Uni100,norules,1,638.418833
+q14,Uni100,norules,2,637.606188
+q14,Uni100,norules,3,637.155494
+q14,Uni100,norules,4,636.072347

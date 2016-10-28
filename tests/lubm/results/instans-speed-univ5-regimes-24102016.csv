@@ -1,0 +1,42 @@
+INSTANS LUBM Results
+24.10.2016
+OS X Yosemite 10.10.5
+Processor 2.7 GHz Intel Core i5
+16 GB 1867 MHz DDR3 memory
+INSTANS 0.3.0.1
+
+query,data,rules,time [s]
+
+./batch-speed-regimes.sh 
+q4,Uni5,rhodf-rules,1,90.435828
+q4,Uni5,rhodf-rules,2,90.770273
+q4,Uni5,rhodf-rules,3,89.923643
+q4,Uni5,rhodf-rules,4,89.340512
+q4,Uni5,dstar-rules,1,104.028720
+q4,Uni5,dstar-rules,2,104.520033
+q4,Uni5,dstar-rules,3,103.680215
+q4,Uni5,dstar-rules,4,103.904675
+q4,Uni5,rdfs-rules,1,59.981042
+q4,Uni5,rdfs-rules,2,60.067922
+q4,Uni5,rdfs-rules,3,59.569624
+q4,Uni5,rdfs-rules,4,59.930770
+q5,Uni5,rhodf-rules,1,88.067751
+q5,Uni5,rhodf-rules,2,87.811819
+q5,Uni5,rhodf-rules,3,88.010024
+q5,Uni5,rhodf-rules,4,88.221221
+q5,Uni5,dstar-rules,1,102.152320
+q5,Uni5,dstar-rules,2,102.134098
+q5,Uni5,dstar-rules,3,102.788568
+q5,Uni5,dstar-rules,4,102.643063
+q5,Uni5,rdfs-rules,1,59.361770
+q5,Uni5,rdfs-rules,2,59.319578
+q5,Uni5,rdfs-rules,3,59.606388
+q5,Uni5,rdfs-rules,4,59.187732
+q11,Uni5,rdfp-rules,1,144.525878
+q11,Uni5,rdfp-rules,2,144.444887
+q11,Uni5,rdfp-rules,3,145.163749
+q11,Uni5,rdfp-rules,4,144.728647
+q13,Uni5,dstar-rules rdfp-rules,1,566.576134
+q13,Uni5,dstar-rules rdfp-rules,2,566.104155
+q13,Uni5,dstar-rules rdfp-rules,3,564.604078
+q13,Uni5,dstar-rules rdfp-rules,4,563.702936
